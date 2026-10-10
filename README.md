@@ -5,11 +5,13 @@ language clients. It uses the MIT license and Conventional Commits.
 
 ## Current status
 
-The local `formula-preparation` branch contains a development candidate,
+The `formula-preparation` branch contains a development candidate,
 `0.1.0-dev.1`. Its GitHub Release URLs are placeholders for unpublished artifacts.
-Do not distribute or install it using those URLs. No formula has been pushed or
-published. Production endpoints, a released Go-client dependency and authorized
-CLI release must precede tap publication.
+Do not distribute or install it using those URLs. Source branch pushes to the
+private repository are authorized as of 2026-10-11; customer package publication
+remains gated. Production endpoints, a released Go-client dependency and a
+CLI release must precede a customer-ready tap. Private GitHub access alone does
+not make the release archives available to unauthenticated customers.
 
 Once an authorized release exists, the customer command will be:
 
