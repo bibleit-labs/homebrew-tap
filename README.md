@@ -80,6 +80,31 @@ Before using the updater:
   requests contents-write and pull-requests-write only for its update job.
 - Review the resulting PR and run/approve its validation before merging. Token-
   created pushes do not automatically run push CI; PR validation may need approval
-  or a manual dispatch. No repository permission setting is changed by setup.
+  or a manual dispatch. The updater does not approve reviews or merge PRs.
 
 Inspired by [Resend's release updater](https://github.com/resend/homebrew-cli/blob/main/.github/workflows/publish-release.yml).
+
+### Private access setup and verification
+
+Create a fine-grained token owned by `bibleit-labs`, selecting only `bibleit-cli`
+and granting Contents: read-only. Save it as the tap repository's Actions secret
+`BIBLEIT_CLI_READ_TOKEN`. If organization approval is required, approve the token
+before testing. Set an expiration and rotate the secret before it expires; do not
+store a personal token with access to all repositories in this secret.
+
+The organization must allow GitHub Actions to create and approve pull requests
+under Settings → Actions → General → Workflow permissions. Then enable the same
+setting in this tap. Keep default workflow permissions read-only; only the updater
+job requests contents-write and pull-requests-write. GitHub combines creation and
+approval in one setting, but this workflow only creates a PR for human review.
+
+Run the read-only **Check updater access** workflow after configuring or rotating
+the secret. It verifies private CLI metadata and release-list access, including
+when there are no releases yet. The updater runs the same check before downloading
+assets. Neither the access check nor tap validation creates tags, releases or PRs.
+A successful check proves release read access, not asset integrity or PR creation;
+the first real released formula update must verify those remaining steps.
+
+Setup status (2026-10-11): repository PR creation is currently blocked by the
+organization policy; the scoped read secret is not yet configured. The authenticated
+setup session cannot change organization policy because it lacks `admin:org`.

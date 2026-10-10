@@ -23,6 +23,10 @@ jobs:
       - uses: actions/checkout@v6
       - name: Validate version before downloads
         run: python3 scripts/update_formula.py --version "$VERSION" --validate-version
+      - name: Verify CLI release read access
+        env:
+          GH_TOKEN: ${{ secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
+        run: bash scripts/check_cli_access.sh
       - name: Download published CLI formula and archives
         env:
           GH_TOKEN: ${{ secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
