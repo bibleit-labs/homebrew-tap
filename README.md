@@ -105,6 +105,8 @@ assets. Neither the access check nor tap validation creates tags, releases or PR
 A successful check proves release read access, not asset integrity or PR creation;
 the first real released formula update must verify those remaining steps.
 
-Setup status (2026-10-11): repository PR creation is currently blocked by the
-organization policy; the scoped read secret is not yet configured. The authenticated
-setup session cannot change organization policy because it lacks `admin:org`.
+Setup status (2026-10-11): repository Actions PR creation is enabled and default
+workflow permissions remain read-only, verified through the GitHub API. The scoped
+read secret is not yet configured, so private release access remains unverified.
+Homebrew syntax/style and seven updater regressions pass at 04e8b16 in
+[run 38092320412](https://github.com/bibleit-labs/homebrew-tap/actions/runs/38092320412).
