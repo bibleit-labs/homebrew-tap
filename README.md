@@ -52,3 +52,34 @@ The runner creates a disposable Homebrew prefix and tap, rewrites only archive
 URLs to local files, and checks actual install/test/completions/reinstall/uninstall.
 Only publish the production formula after its CLI release is available. Updating
 this repository does not tag or release the CLI or Go client.
+
+## CI and reviewed release updates
+
+`tests.yml` runs on pushes, pull requests and manual dispatch: Homebrew
+`brew test-bot --only-tap-syntax` checks syntax/style, and seven Python regressions
+check release version validation, corruption, checksums and formula URLs. This
+workflow does not download the unpublished development candidate. Actual install,
+reinstall, completion and uninstall checks run in the CLI candidate workflow;
+repeat installation against customer-accessible published URLs before launch.
+
+`update-formula.yml` is manually dispatched with a published CLI version. It
+downloads four macOS/Linux archives plus checksums, manifest.json and the
+CLI-generated bibleit-cli.rb, verifies a clean production manifest and all archive
+hashes/URLs, then opens a release/vX.Y.Z PR against the current default branch.
+It uses Conventional Commits and never auto-merges or publishes CLI assets.
+An unchanged formula is a no-op; existing release branches require review rather
+than force-pushing. Do not invoke it for development-only candidates.
+
+Before using the updater:
+
+- Publish all required generated metadata/formula alongside the CLI archives.
+- While CLI is private, configure BIBLEIT_CLI_READ_TOKEN in this tap with Contents:
+  read access only to bibleit-cli; the tap's own GITHUB_TOKEN does not grant cross-
+  repository private access. Public CLI releases need no additional read token.
+- Permit Actions to create pull requests in repository/org policy; the workflow
+  requests contents-write and pull-requests-write only for its update job.
+- Review the resulting PR and run/approve its validation before merging. Token-
+  created pushes do not automatically run push CI; PR validation may need approval
+  or a manual dispatch. No repository permission setting is changed by setup.
+
+Inspired by [Resend's release updater](https://github.com/resend/homebrew-cli/blob/main/.github/workflows/publish-release.yml).
