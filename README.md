@@ -107,6 +107,10 @@ the first real released formula update must verify those remaining steps.
 
 Setup status (2026-10-11): repository Actions PR creation is enabled and default
 workflow permissions remain read-only, verified through the GitHub API. The scoped
-read secret is not yet configured, so private release access remains unverified.
+read secret is configured. Private CLI metadata and release-list access passed
+using the Actions secret at bf6a46b in
+[run 38092683138](https://github.com/bibleit-labs/homebrew-tap/actions/runs/38092683138).
+The user confirmed the token selects only bibleit-cli with Contents: read-only;
+the access check proves read access without inspecting the token's full scope.
 Homebrew syntax/style and seven updater regressions pass at 04e8b16 in
 [run 38092320412](https://github.com/bibleit-labs/homebrew-tap/actions/runs/38092320412).
