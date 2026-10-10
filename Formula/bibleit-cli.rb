@@ -1,4 +1,4 @@
-class Bibleit < Formula
+class BibleitCli < Formula
   desc "Command-line client for Bibleit"
   homepage "https://github.com/bibleit-labs/bibleit-cli"
   version "0.1.0-dev.1"
