@@ -1,10 +1,15 @@
-name: Validate released Homebrew package
+name: Validate Homebrew package
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: Published CLI version matching this branch's formula
+        description: CLI version matching this branch's formula
         required: true
+        type: string
+      candidate_run_id:
+        description: Successful private CLI candidate run ID; empty selects a published release
+        required: false
+        default: ''
         type: string
 permissions:
   contents: read
@@ -18,6 +23,7 @@ jobs:
     timeout-minutes: 20
     env:
       VERSION: ${{ inputs.version }}
+      CANDIDATE_RUN: ${{ inputs.candidate_run_id }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -28,7 +34,7 @@ jobs:
         run: |
           python3 scripts/update_formula.py --version "$VERSION" --validate-version
           bash scripts/check_cli_access.sh
-          gh release view "$VERSION" --repo bibleit-labs/bibleit-cli --json isDraft --jq 'if .isDraft then error("release is still a draft") else . end'
+          if [ -z "$CANDIDATE_RUN" ]; then gh release view "$VERSION" --repo bibleit-labs/bibleit-cli --json isDraft --jq 'if .isDraft then error("release is still a draft") else . end'; fi
       - uses: Homebrew/actions/setup-homebrew@56e6e1830b3c103b917ea1a7d175dcf99b62e6fc
         with:
           token: ${{ github.token }}
@@ -36,10 +42,31 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
         run: |
-          gh release download "$VERSION" --repo bibleit-labs/bibleit-cli --dir artifacts \
-            --pattern 'bibleit-cli.rb' --pattern 'manifest.json' --pattern 'checksums.txt' \
-            --pattern "bibleit_${VERSION#v}_darwin_*.tar.gz" \
-            --pattern "bibleit_${VERSION#v}_linux_*.tar.gz"
+          if [ -n "$CANDIDATE_RUN" ]; then
+            [[ "$CANDIDATE_RUN" =~ ^[0-9]+$ ]] || { echo 'Invalid candidate run ID'; exit 1; }
+            gh api "repos/bibleit-labs/bibleit-cli/actions/runs/$CANDIDATE_RUN" > candidate-run.json
+            python3 - <<'PYRUN'
+          import json
+          run = json.load(open('candidate-run.json'))
+          assert run['repository']['full_name'] == 'bibleit-labs/bibleit-cli'
+          assert run['path'] == '.github/workflows/release-candidate.yml'
+          assert run['event'] == 'workflow_dispatch'
+          assert run['status'] == 'completed' and run['conclusion'] == 'success'
+          PYRUN
+            gh run download "$CANDIDATE_RUN" --repo bibleit-labs/bibleit-cli --name candidate-assets --dir artifacts
+            python3 - <<'PYINPUT'
+          import json, os
+          run = json.load(open('candidate-run.json'))
+          manifest = json.load(open('artifacts/manifest.json'))
+          assert manifest['commit'] == run['head_sha']
+          assert manifest['version'] == os.environ['VERSION']
+          PYINPUT
+          else
+            gh release download "$VERSION" --repo bibleit-labs/bibleit-cli --dir artifacts \
+              --pattern 'bibleit-cli.rb' --pattern 'manifest.json' --pattern 'checksums.txt' \
+              --pattern "bibleit_${VERSION#v}_darwin_*.tar.gz" \
+              --pattern "bibleit_${VERSION#v}_linux_*.tar.gz"
+          fi
           python3 scripts/update_formula.py --version "$VERSION" --assets artifacts --output verified.rb
           cmp verified.rb Formula/bibleit-cli.rb
       - name: Install, test, reinstall and uninstall in isolated Homebrew prefix
