@@ -20,12 +20,13 @@ The candidate build and native CLI code tests passed, but GitHub blocked the
 fresh candidate installer jobs for account billing/spending-limit reasons:
 https://github.com/bibleit-labs/bibleit-cli/actions/runs/38174450362.
 Native Windows PowerShell 7/5.1 and Scoop checks and tap-owned Linux validation
-remain required. After restoring capacity, rerun the failed candidate jobs,
-then dispatch validate-release.yml on release/v0.0.2 with version=v0.0.2 and
-candidate_run_id=38174450362. This mode accepts only successful CLI candidate
-runs, verifies source/version and checks the actual branch formula before
-native Linux/macOS Homebrew installation. The CLI read token needs Actions read
-access for candidate artifacts as well as Contents read for published releases.
+remain required. Windows checks are held pending by owner instruction.
+The public-docs update changes the README embedded in CLI archives. The current
+formula therefore matches the recorded 9fb7bfc candidate only; build a fresh
+candidate from the final approved source, regenerate hashes and validate that
+exact formula before release. Once Actions capacity is available, use the new
+successful candidate_run_id with validate-release.yml. The CLI read token needs
+Actions read for candidate artifacts and Contents read for published releases.
 
 Do not merge this formula into main or offer it as an available installation
 until the matching corrected release is ready. Recommended old-release handling:

@@ -1,41 +1,31 @@
 # Bibleit Homebrew tap
 
 Homebrew formulae for the [Bibleit CLI](https://github.com/bibleit-labs/bibleit-cli).
-The package is **`bibleit-cli`**; the installed executable is **`bibleit`**.
+The package name is **bibleit-cli**; the executable is **bibleit**.
 
-## Installation
+## Availability and planned installation
 
-The tap contains the **v0.0.1** formula. The tap and CLI release assets are
-currently private. The commands below become available to unauthenticated users
-after public access is enabled; fresh public installation checks are pending.
+The tap and CLI release assets remain **private**. Main references private
+v0.0.1, whose archives lack required notices. The review branch prepares corrected
+v0.0.2 with notice retention; it is not an approved release or available public
+installation. [Release preparation](docs/release-v0.0.2.md) records the gates.
+Making the tap public alone would not make private CLI downloads accessible.
+
+After the matching corrected release and public access are approved:
 
 ```sh
 brew install bibleit-labs/tap/bibleit-cli
-```
-
-Alternatively, add the tap first:
-
-```sh
-brew tap bibleit-labs/tap
-brew install bibleit-cli
-```
-
-The fully qualified command selects this formula explicitly. The repository name
-`homebrew-tap` gives the tap identifier `bibleit-labs/tap`.
-The formula supports macOS/Linux on amd64 and arm64 and installs Bash, Zsh, and
-Fish completions. Homebrew trust policy may require explicitly trusting a newly added tap.
-
-```sh
 bibleit version
 bibleit auth login
 ```
 
-See the [CLI documentation](https://github.com/bibleit-labs/bibleit-cli#readme)
-for authentication, commands, Windows installers, and other installation methods.
+The repository name homebrew-tap gives the identifier bibleit-labs/tap. The formula
+selects macOS/Linux amd64/arm64 archives and installs Bash/Zsh/Fish completions,
+LICENSE and THIRD_PARTY_NOTICES. Runtime binaries need no Go or Python installation;
+SSH commands need OpenSSH. Supported package builds do not prove native validation
+on every architecture. Account/translation access is separate from repository access.
 
-## Updating and uninstalling
-
-Once release access is available:
+For updates/uninstall after installation becomes available:
 
 ```sh
 brew update
@@ -43,49 +33,54 @@ brew upgrade bibleit-labs/tap/bibleit-cli
 brew uninstall bibleit-cli
 ```
 
-## Maintaining the formula
+See [the CLI README](https://github.com/bibleit-labs/bibleit-cli#readme) for commands,
+authentication, Windows and script installers, and compatibility limits.
 
-The CLI release workflow generates archives, checksums, a release manifest, and
-`bibleit-cli.rb`. This tap's updater verifies those published files and opens a
-reviewable pull request; it never merges automatically or publishes CLI releases.
-Stable formula versions are inferred from verified release URLs. Prerelease
-versions remain explicit.
+## Formula maintenance
 
-Run the **Update release formula** workflow with a published CLI version. Review all
-four macOS/Linux architecture URLs and hashes, installed completions, and the
-version test before merging. Use Conventional Commits, for example
-`chore(formula): update bibleit-cli to v0.0.1`.
+The CLI generates the formula from frozen archives. This tap verifies manifest
+eligibility, hashes, notice contents and installed notices. Stable versions are
+inferred from release URLs; prereleases retain explicit versions. The Update
+release formula workflow accepts a published version and opens a reviewable PR;
+it never merges or publishes the CLI release. Do not run it for an unpublished
+candidate. Use Conventional Commits such as `fix(formula): update to v0.0.2`.
 
-While the CLI is private, the tap needs an Actions secret named
-`BIBLEIT_CLI_READ_TOKEN` with Contents: read access only to `bibleit-cli`.
-Organization and repository Actions policy must permit pull request creation.
-The updater requests contents-write and pull-requests-write for its update job;
-it does not approve reviews. Updates created with `GITHUB_TOKEN` may require
-manual CI dispatch or approval before validation runs.
+While inputs are private, BIBLEIT_CLI_READ_TOKEN needs Contents read on the CLI,
+plus Actions read for candidate artifacts. The updater's own job uses scoped
+contents/pull-request write permissions for its branch/PR. Organization/repository
+policy must permit PR creation; bot PRs may need manual validation dispatch.
+Tokens are for maintainer validation, not embedded customer download credentials.
 
-## Validation
+## Candidate and release validation
 
-Pushes and pull requests run Homebrew syntax/style checks and Python updater
-regressions. The manual **Validate released Homebrew package** workflow runs native
-macOS/Linux install, version, completion, reinstall, and uninstall checks against
-authenticated release downloads. Run it on the formula pull request's branch
-before merging.
+Validate Homebrew package runs native macOS/Linux install/test/reinstall,
+completions, exact notice retention and uninstall on the formula review branch.
+Set candidate_run_id for a successful private CLI candidate run; omit it for a
+published release. Both paths verify the branch formula against the exact inputs.
 
-To validate locally with an authorized GitHub account:
+For an authorized local reviewer with RUN_ID set to a successful candidate run:
 
 ```sh
-gh release download v0.0.1 --repo bibleit-labs/bibleit-cli --dir artifacts/v0.0.1
-python3 scripts/check_released_homebrew.py --assets artifacts/v0.0.1 \
+: "${RUN_ID:?Set RUN_ID to a verified CLI candidate run}"
+gh run download "$RUN_ID" --repo bibleit-labs/bibleit-cli \
+  --name candidate-assets --dir artifacts/v0.0.2
+python3 scripts/check_released_homebrew.py --assets artifacts/v0.0.2 \
   --formula Formula/bibleit-cli.rb --helper scripts/check_homebrew.py \
   --report artifacts/homebrew-validation.json
 ```
 
-The validator checks the published formula and archive checksums, then uses
-local-file fixtures in an isolated Homebrew prefix. The Homebrew sandbox stays
-enabled. These checks do not prove unauthenticated access to private release URLs.
-The v0.0.1 published-package checks passed on macOS and Linux; fresh public installs
-remain a separate launch check.
+Use the matching review branch. For an approved published version, replace the
+download command with gh release download for that version. Local fixtures retain
+production hashes/install methods and rewrite only download URLs to local files.
+The Homebrew sandbox remains enabled. This does not prove unauthenticated access.
 
-For workflow names and inputs, see [.github/workflows](.github/workflows).
-See [contributing](CONTRIBUTING.md) and [Homebrew tap documentation](https://docs.brew.sh/Taps).
-Licensed under [MIT](LICENSE).
+Tap syntax/style and native macOS candidate checks passed. Native Linux CI remains
+pending Actions capacity; corrected CLI Windows/Scoop checks remain pending by
+owner instruction. Docs changes alter packaged README inputs, so refresh the final
+candidate and formula hashes before approval. v0.0.1 validation commands are
+intentionally omitted because the current verifier rejects its missing notices.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md), [workflows](.github/workflows), and
+[SECURITY.md](SECURITY.md). Tap source is [MIT licensed](LICENSE); redistributed
+CLI binaries also retain their own third-party notices. Software licensing does
+not grant rights to Bible translations returned by the service.
