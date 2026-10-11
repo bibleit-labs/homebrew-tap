@@ -29,18 +29,17 @@ jobs:
           python3 scripts/update_formula.py --version "$VERSION" --validate-version
           bash scripts/check_cli_access.sh
           gh release view "$VERSION" --repo bibleit-labs/bibleit-cli --json isDraft --jq 'if .isDraft then error("release is still a draft") else . end'
-      # Checkout before Homebrew configures Git authentication to avoid duplicate headers.
-      - name: Check out released CLI validation helpers
-        uses: actions/checkout@v6
-        with:
-          repository: bibleit-labs/bibleit-cli
-          ref: ${{ inputs.version }}
-          path: .ci-cli
-          token: ${{ secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
-          persist-credentials: false
       - uses: Homebrew/actions/setup-homebrew@56e6e1830b3c103b917ea1a7d175dcf99b62e6fc
         with:
           token: ${{ github.token }}
+      - name: Download released CLI validation helpers
+        env:
+          GH_TOKEN: ${{ secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
+        run: |
+          # Keep helpers outside the tap checkout: Homebrew setup cleans its worktree.
+          gh api "repos/bibleit-labs/bibleit-cli/tarball/$VERSION" > "$RUNNER_TEMP/bibleit-cli-release.tar.gz"
+          mkdir "$RUNNER_TEMP/bibleit-cli-release"
+          tar -xzf "$RUNNER_TEMP/bibleit-cli-release.tar.gz" --strip-components=1 -C "$RUNNER_TEMP/bibleit-cli-release"
       - name: Download and verify released formula and archives
         env:
           GH_TOKEN: ${{ secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
@@ -52,7 +51,7 @@ jobs:
           python3 scripts/update_formula.py --version "$VERSION" --assets artifacts --output verified.rb
           cmp verified.rb Formula/bibleit-cli.rb
       - name: Install, test, reinstall and uninstall in isolated Homebrew prefix
-        run: python3 .ci-cli/scripts/check_homebrew.py --assets artifacts --formula Formula/bibleit-cli.rb --report build/validation/homebrew.json
+        run: python3 "$RUNNER_TEMP/bibleit-cli-release/scripts/check_homebrew.py" --assets artifacts --formula Formula/bibleit-cli.rb --report build/validation/homebrew.json
       - name: Save validation evidence
         if: always()
         uses: actions/upload-artifact@v7
