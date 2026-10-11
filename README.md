@@ -5,7 +5,7 @@ language clients. It uses the MIT license and Conventional Commits.
 
 ## Current status
 
-The `master` branch contains a development candidate,
+The `main` branch contains a development candidate,
 `0.1.0-dev.1`. Its GitHub Release URLs are placeholders for unpublished artifacts.
 Do not distribute or install it using those URLs. Source branch pushes to the
 private repository are authorized as of 2026-10-11; customer package publication
@@ -117,7 +117,7 @@ Homebrew syntax/style and seven updater regressions pass at 04e8b16 in
 
 ## Master and release validation
 
-`master` is the integration/default branch. Source promotion does not publish
+`main` is the integration/default branch. Source promotion does not publish
 package URLs. The draft formula remains unavailable until a real CLI release.
 
 After publishing an approved CLI release, dispatch **Update release formula**
@@ -131,7 +131,7 @@ These checks download authenticated assets locally; customer installation from
 private GitHub URLs still needs a separate public-distribution/access decision.
 The supported customer command remains `brew install bibleit-labs/tap/bibleit-cli`.
 
-Master setup verification (2026-10-11): tap validation passes at a41e453 in
+Main setup verification (2026-10-11): tap validation passes at a41e453 in
 [run 38158709825](https://github.com/bibleit-labs/homebrew-tap/actions/runs/38158709825),
 and private CLI access passes in
 [run 38158727488](https://github.com/bibleit-labs/homebrew-tap/actions/runs/38158727488).
