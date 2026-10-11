@@ -29,8 +29,31 @@ class FormulaUpdateTests(unittest.TestCase):
     def write_manifest(self):
         (self.assets / 'manifest.json').write_text(json.dumps(self.manifest))
 
-    def test_verified_formula_is_copied_unchanged(self):
-        self.assertEqual(verified_formula(self.version, self.assets), self.formula)
+    def test_stable_formula_omits_only_redundant_version(self):
+        expected = self.formula.replace('  version "0.1.0"\n', '')
+        self.assertEqual(verified_formula(self.version, self.assets), expected)
+
+    def test_mismatched_explicit_version_is_rejected(self):
+        (self.assets / 'bibleit-cli.rb').write_text(self.formula.replace('version "0.1.0"', 'version "9.0.0"'))
+        with self.assertRaises(ValueError):
+            verified_formula(self.version, self.assets)
+
+    def test_prerelease_version_is_preserved(self):
+        for p in list(self.assets.iterdir()):
+            text = p.read_text().replace('0.1.0', '0.1.0-rc.1')
+            p.write_text(text)
+            if '0.1.0' in p.name:
+                p.rename(p.with_name(p.name.replace('0.1.0', '0.1.0-rc.1')))
+        manifest = json.loads((self.assets / 'manifest.json').read_text())
+        hashes = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in self.assets.glob('*.tar.gz')}
+        manifest['artifacts'] = hashes
+        (self.assets / 'manifest.json').write_text(json.dumps(manifest))
+        text = (self.assets / 'bibleit-cli.rb').read_text()
+        for oldname, oldhash in self.manifest['artifacts'].items():
+            text = text.replace(oldhash, hashes[oldname.replace('0.1.0', '0.1.0-rc.1')])
+        (self.assets / 'bibleit-cli.rb').write_text(text)
+        (self.assets / 'checksums.txt').write_text(''.join(f'{sha}  {name}\n' for name, sha in hashes.items()))
+        self.assertEqual(verified_formula('v0.1.0-rc.1', self.assets), text)
 
     def test_versions_cannot_be_shell_or_path_input(self):
         for value in ('v1', '../v0.1.0', 'v0.1.0;echo', 'v0.1.0\n', '--latest', 'v01.0.0'):
