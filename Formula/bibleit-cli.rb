@@ -1,7 +1,6 @@
 class BibleitCli < Formula
   desc "Command-line client for Bibleit"
   homepage "https://github.com/bibleit-labs/bibleit-cli"
-  version "0.0.1"
   license "MIT"
   on_macos do
     if Hardware::CPU.arm?

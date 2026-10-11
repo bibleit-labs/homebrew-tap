@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify released CLI assets and copy its generated Homebrew formula."""
+"""Verify released CLI assets and prepare its generated Homebrew formula."""
 import argparse
 import hashlib
 import json
@@ -41,6 +41,10 @@ def verified_formula(version, assets):
             expected[f'https://github.com/bibleit-labs/bibleit-cli/releases/download/{version}/{name}'] = sha
     if len(urls) != 4 or len(hashes) != 4 or len(set(urls)) != 4 or dict(zip(urls, hashes)) != expected:
         raise ValueError('formula URLs/checksums do not match the released archives')
+    # Stable archive URLs already identify the version; Homebrew audit rejects
+    # a redundant explicit version. Preserve it for prereleases.
+    if '-' not in version:
+        text = re.sub(r'^  version "[^"\n]+"\n', '', text, flags=re.M)
     return text
 
 def main():
