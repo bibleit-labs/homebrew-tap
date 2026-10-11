@@ -15,7 +15,10 @@ Both jobs verified candidate provenance, archive hashes and exact formula, then
 install/test/reinstall, completions, exact notices and uninstall in isolated
 prefixes. Formula SHA256: 4bc0c10b2c36daf838240a2d11685bfcccbf240eeb039497124f289e9364fc1a.
 Syntax/style run 38178072711 passed. The CLI candidate also passed native Windows
-AMD64 PowerShell 7/5.1 and Scoop checks. Windows arm64 runtime was not exercised.
+AMD64 PowerShell 7/5.1 and Scoop checks. Follow-up CLI source cbe588d passed
+[run 38179740828](https://github.com/bibleit-labs/bibleit-cli/actions/runs/38179740828),
+including native ARM64 PowerShell 7/5.1 and Scoop. All eight package hashes are
+unchanged and the verifier generates this exact formula; no hash update is needed.
 
 The private token now has working Actions/Contents read access. Permission
 preflight occurs before Homebrew setup; artifact download follows setup because
