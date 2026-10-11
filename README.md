@@ -5,15 +5,14 @@ language clients. It uses the MIT license and Conventional Commits.
 
 ## Current status
 
-The `main` branch contains a development candidate,
-`0.1.0-dev.1`. Its GitHub Release URLs are placeholders for unpublished artifacts.
-Do not distribute or install it using those URLs. Source branch pushes to the
-private repository are authorized as of 2026-10-11; customer package publication
-remains gated. Production endpoints, a released Go-client dependency and a
-CLI release must precede a customer-ready tap. Private GitHub access alone does
-not make the release archives available to unauthenticated customers.
+The `main` branch contains the verified `v0.0.1` formula. Go client and CLI
+`v0.0.1` releases are published in private repositories; this tap remains private.
+The updater verified the actual published archives and opened PR1, which was
+reviewed and merged after syntax/style, ten updater regressions and native
+macOS/Linux install/test/completion/reinstall/uninstall checks passed.
 
-Once an authorized release exists, the customer command will be:
+Private GitHub access does not make archive URLs available to unauthenticated
+customers. After public release access is enabled, the customer command is:
 
 ```sh
 brew install bibleit-labs/tap/bibleit-cli
@@ -35,30 +34,35 @@ See [Homebrew taps](https://docs.brew.sh/Taps) and
 ## Formula updates
 
 The separate `bibleit-cli` repository generates `bibleit-cli.rb` from the release
-version and SHA-256 checksums. Copy the reviewed released formula to
-`Formula/bibleit-cli.rb`. Check all four macOS/Linux architecture URLs and hashes,
+version and SHA-256 checksums. The updater verifies the released formula and archives, then writes
+`Formula/bibleit-cli.rb`. Stable formulas omit the redundant explicit version
+line after verification; prerelease versions remain explicit. Check all four macOS/Linux architecture URLs and hashes,
 license, installed completions and the version test. Use an independent commit
-such as `chore(formula): update bibleit-cli to 0.1.0`.
+such as `chore(formula): update bibleit-cli to v0.0.1`.
 
-Validate a local candidate from the sibling CLI repository without installing
-anything into the user's normal Homebrew prefix:
+Validate authenticated, downloaded release assets from this tap checkout:
 
 ```sh
-python3 scripts/check_homebrew.py --assets build/releases/v0.1.0-dev.1 \
-  --formula ../homebrew-tap/Formula/bibleit-cli.rb
+gh release download v0.0.1 --repo bibleit-labs/bibleit-cli --dir build/releases/v0.0.1
+python3 scripts/check_released_homebrew.py --assets build/releases/v0.0.1 \
+  --formula Formula/bibleit-cli.rb --helper scripts/check_homebrew.py \
+  --report build/validation/homebrew.json
 ```
 
-The runner creates a disposable Homebrew prefix and tap, rewrites only archive
-URLs to local files, and checks actual install/test/completions/reinstall/uninstall.
-Only publish the production formula after its CLI release is available. Updating
-this repository does not tag or release the CLI or Go client.
+The tap owns the installation validator, derived from CLI v0.0.1 checks. It
+verifies the published formula and archive hashes before making disposable
+local-file URLs and preserving the verified version in that fixture. Linux
+prepares core metadata before the sandboxed installation and excludes runner
+Git credentials from the Git process. The sandbox remains enabled. These checks
+use an isolated prefix; they do not prove public access to private release URLs.
+Updating this repository does not tag or release the CLI or Go client.
 
 ## CI and reviewed release updates
 
 `tests.yml` runs on pushes, pull requests and manual dispatch: Homebrew
-`brew test-bot --only-tap-syntax` checks syntax/style, and eight Python regressions
+`brew test-bot --only-tap-syntax` checks syntax/style, and ten Python regressions
 check release version validation, corruption, checksums and formula URLs. This
-workflow does not download the unpublished development candidate. Actual install,
+workflow checks formula syntax/style without downloading its archives. Actual install,
 reinstall, completion and uninstall checks run in the CLI candidate workflow;
 repeat installation against customer-accessible published URLs before launch.
 
@@ -122,9 +126,9 @@ package URLs. The draft formula remains unavailable until a real CLI release.
 
 After publishing an approved CLI release, dispatch **Update release formula**
 with its tag. Review its `release/vX.Y.Z` PR, then run **Validate released Homebrew
-package** on that PR branch with the same tag before merging. It checks the exact
-released helper scripts, archive hashes, standalone-client manifest and formula
-identity, then performs actual isolated install/test/completion/reinstall/uninstall
+package** on that PR branch with the same tag before merging. It checks the published archive hashes, standalone-client manifest and verified
+formula identity, then uses the tap-owned validator for isolated
+install/test/completion/reinstall/uninstall
 checks on macOS and Linux. The private CLI read secret and Actions PR permissions
 are already configured; the read-only access workflow can be rerun after rotation.
 These checks download authenticated assets locally; customer installation from
@@ -139,3 +143,13 @@ All eight updater regressions pass. The strengthened updater also accepts and
 verifies the actual clean standalone CLI candidate from run 38158698450, including
 its pinned client checksum and four formula archive hashes. These are candidate
 checks; no released formula update or customer-access validation is claimed.
+
+
+### v0.0.1 release verification
+
+Updater38166255153 verified the published assets and opened
+[PR1](https://github.com/bibleit-labs/homebrew-tap/pull/1). Final source61dcf0c
+passes tap validation38167419995 and both published-package jobs in38167449364.
+The PR merged as e0db882; its merged release branch is deleted. Earlier failed
+checkout, audit and local-file/Linux sandbox fixtures were corrected before merge.
+CLI release assets remain unchanged. Public installation awaits the access decision.
