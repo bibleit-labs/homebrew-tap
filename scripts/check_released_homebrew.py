@@ -6,6 +6,8 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -39,6 +41,16 @@ def main():
         # The isolated Homebrew prefix does not need the runner's global Git
         # credentials; public core metadata can be cloned without them.
         env = dict(os.environ, GIT_CONFIG_GLOBAL=os.devnull)
+        if sys.platform.startswith('linux'):
+            # Homebrew filters the inherited Git config variable. Its documented
+            # Linux Git executable setting keeps isolation at the Git process.
+            git = shutil.which('git')
+            if not git:
+                raise RuntimeError('Git is required for isolated Homebrew validation')
+            wrapper = Path(directory) / 'git-isolated'
+            wrapper.write_text('#!/bin/sh\nexport GIT_CONFIG_GLOBAL=/dev/null\nexec ' + shlex.quote(git) + ' "$@"\n')
+            wrapper.chmod(0o755)
+            env['HOMEBREW_GIT_PATH'] = str(wrapper.resolve())
         subprocess.run([sys.executable, str(args.helper), '--assets', str(args.assets),
                         '--formula', str(formula), '--report', str(args.report)],
                        env=env, check=True)
