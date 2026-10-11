@@ -3,30 +3,23 @@
 Prepared 2026-10-11 on release/v0.0.2; main remains on v0.0.1. No existing
 release assets or repository visibility settings were changed.
 
-The proposed formula uses verified CLI v0.0.2 archive hashes from the clean
-candidate source 9fb7bfc4565ffc3adacbcecf8343042e056ffc8c. It installs LICENSE and
-THIRD_PARTY_NOTICES in pkgshare. The updater requires unique nonempty notices
-with identical contents across the four archives and requires their installation.
-Its 13 focused regression tests passed.
+The proposed formula was refreshed from verified documentation candidate
+b802ea3fa74ef1d1b34d4173b3ef1ee51724f9d6 (CLI run 38176529757). All six target
+archives contain LICENSE, THIRD_PARTY_NOTICES and the corrected README. The
+formula installs both notices in pkgshare. The updater checks unique nonempty
+notices and identical bytes across its four archives; all 13 regressions passed.
 
-Tap syntax/style CI passed at
-https://github.com/bibleit-labs/homebrew-tap/actions/runs/38174382048.
-The tap-owned native macOS arm64 fixture passed install/test/reinstall/completions,
-exact notice retention after install/reinstall, and uninstall using the exact
-candidate archives and a disposable Homebrew prefix. Only download URLs were
-rewritten to local files; production hashes and installation methods were retained.
+That CLI candidate passed native Linux, macOS Homebrew, Windows PowerShell 7/5.1,
+parser/failure checks and the full Scoop lifecycle. Windows validation resumed
+on owner instruction. Tap syntax/style CI passed for commit 2594b4f in runs
+38176888008 and 38176884728.
 
-The candidate build and native CLI code tests passed, but GitHub blocked the
-fresh candidate installer jobs for account billing/spending-limit reasons:
-https://github.com/bibleit-labs/bibleit-cli/actions/runs/38174450362.
-Native Windows PowerShell 7/5.1 and Scoop checks and tap-owned Linux validation
-remain required. Windows checks are held pending by owner instruction.
-The public-docs update changes the README embedded in CLI archives. The current
-formula therefore matches the recorded 9fb7bfc candidate only; build a fresh
-candidate from the final approved source, regenerate hashes and validate that
-exact formula before release. Once Actions capacity is available, use the new
-successful candidate_run_id with validate-release.yml. The CLI read token needs
-Actions read for candidate artifacts and Contents read for published releases.
+The final README now records Windows success, and CI uses pinned Actions plus
+conditional private/public dependency access. A fresh final candidate and matching
+formula comparison are being completed. Tap-owned native Linux/macOS validation
+must consume the exact successful final candidate, not an earlier run. The
+private read secret needs Actions read for artifacts and Contents read for
+releases; public mode uses the scoped GitHub token instead.
 
 Do not merge this formula into main or offer it as an available installation
 until the matching corrected release is ready. Recommended old-release handling:

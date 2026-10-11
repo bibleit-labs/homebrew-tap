@@ -35,8 +35,9 @@ candidate artifacts. Do not put GitHub credentials in formula URLs. Review the
 script/options and [README](README.md) for authenticated fixture commands.
 These checks do not establish anonymous downloads or customer installation.
 
-Corrected-release Windows installer/Scoop checks remain pending. The tap's native
-macOS check passed; Linux CI is pending GitHub Actions capacity. Do not publish,
+Windows installer/Scoop checks resumed and passed on the documentation candidate.
+The tap's native macOS check passed previously; final native Linux/macOS validation
+is being completed. Do not publish,
 merge the staged formula, change visibility or withdraw old assets without approval.
 Match the approved release artifacts before merging. Retain the upstream MIT
 notice and all binary component notices; the formula's MIT metadata does not
