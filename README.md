@@ -5,10 +5,9 @@ The package name is **bibleit-cli**; the executable is **bibleit**.
 
 ## Availability and planned installation
 
-The tap and CLI release assets remain **private**. Main references private
-v0.0.1, whose archives lack required notices. The review branch prepares corrected
-v0.0.2 with notice retention; it is not an approved release or available public
-installation. [Release preparation](docs/release-v0.0.2.md) records the gates.
+The tap and CLI release assets remain **private**. Corrected packages and notice
+retention are being prepared for review. Public installation awaits approval.
+[Release preparation](docs/release-readiness.md) records the remaining gates.
 Making the tap public alone would not make private CLI downloads accessible.
 
 After the matching corrected release and public access are approved:
@@ -43,7 +42,7 @@ eligibility, hashes, notice contents and installed notices. Stable versions are
 inferred from release URLs; prereleases retain explicit versions. The Update
 release formula workflow accepts a published version and opens a reviewable PR;
 it never merges or publishes the CLI release. Do not run it for an unpublished
-candidate. Use Conventional Commits such as `fix(formula): update to v0.0.2`.
+candidate. Use Conventional Commits such as `fix(formula): retain redistribution notices`.
 
 While inputs are private, BIBLEIT_CLI_READ_TOKEN needs Contents read on the CLI,
 plus Actions read for candidate artifacts. The updater's own job uses scoped
@@ -63,8 +62,8 @@ For an authorized local reviewer with RUN_ID set to a successful candidate run:
 ```sh
 : "${RUN_ID:?Set RUN_ID to a verified CLI candidate run}"
 gh run download "$RUN_ID" --repo bibleit-labs/bibleit-cli \
-  --name candidate-assets --dir artifacts/v0.0.2
-python3 scripts/check_released_homebrew.py --assets artifacts/v0.0.2 \
+  --name candidate-assets --dir artifacts/candidate
+python3 scripts/check_released_homebrew.py --assets artifacts/candidate \
   --formula Formula/bibleit-cli.rb --helper scripts/check_homebrew.py \
   --report artifacts/homebrew-validation.json
 ```
@@ -74,11 +73,9 @@ download command with gh release download for that version. Local fixtures retai
 production hashes/install methods and rewrite only download URLs to local files.
 The Homebrew sandbox remains enabled. This does not prove unauthenticated access.
 
-Tap syntax/style and native macOS candidate checks passed. Native Linux CI remains
-undergoing final validation; corrected CLI Windows/Scoop checks resumed and
-passed on the documentation candidate. Docs changes alter packaged README inputs, so refresh the final
-candidate and formula hashes before approval. v0.0.1 validation commands are
-intentionally omitted because the current verifier rejects its missing notices.
+Current installation evidence and remaining gates are in
+[release preparation](docs/release-readiness.md). Packaged README changes require
+fresh candidate archives and matching formula hashes before release approval.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), [workflows](.github/workflows), and
 [SECURITY.md](SECURITY.md). Tap source is [MIT licensed](LICENSE); redistributed
