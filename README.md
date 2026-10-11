@@ -75,8 +75,8 @@ production hashes/install methods and rewrite only download URLs to local files.
 The Homebrew sandbox remains enabled. This does not prove unauthenticated access.
 
 Tap syntax/style and native macOS candidate checks passed. Native Linux CI remains
-pending Actions capacity; corrected CLI Windows/Scoop checks remain pending by
-owner instruction. Docs changes alter packaged README inputs, so refresh the final
+undergoing final validation; corrected CLI Windows/Scoop checks resumed and
+passed on the documentation candidate. Docs changes alter packaged README inputs, so refresh the final
 candidate and formula hashes before approval. v0.0.1 validation commands are
 intentionally omitted because the current verifier rejects its missing notices.
 
