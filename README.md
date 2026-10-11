@@ -114,3 +114,19 @@ The user confirmed the token selects only bibleit-cli with Contents: read-only;
 the access check proves read access without inspecting the token's full scope.
 Homebrew syntax/style and seven updater regressions pass at 04e8b16 in
 [run 38092320412](https://github.com/bibleit-labs/homebrew-tap/actions/runs/38092320412).
+
+## Master and release validation
+
+`master` is the integration/default branch. Source promotion does not publish
+package URLs. The draft formula remains unavailable until a real CLI release.
+
+After publishing an approved CLI release, dispatch **Update release formula**
+with its tag. Review its `release/vX.Y.Z` PR, then run **Validate released Homebrew
+package** on that PR branch with the same tag before merging. It checks the exact
+released helper scripts, archive hashes, standalone-client manifest and formula
+identity, then performs actual isolated install/test/completion/reinstall/uninstall
+checks on macOS and Linux. The private CLI read secret and Actions PR permissions
+are already configured; the read-only access workflow can be rerun after rotation.
+These checks download authenticated assets locally; customer installation from
+private GitHub URLs still needs a separate public-distribution/access decision.
+The supported customer command remains `brew install bibleit-labs/tap/bibleit-cli`.

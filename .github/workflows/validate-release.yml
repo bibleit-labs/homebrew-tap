@@ -1,0 +1,59 @@
+name: Validate released Homebrew package
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Published CLI version matching this branch's formula
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    env:
+      VERSION: ${{ inputs.version }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Validate version and private release access
+        env:
+          GH_TOKEN: ${{ secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
+        run: |
+          python3 scripts/update_formula.py --version "$VERSION" --validate-version
+          bash scripts/check_cli_access.sh
+          gh release view "$VERSION" --repo bibleit-labs/bibleit-cli --json isDraft --jq 'if .isDraft then error("release is still a draft") else . end'
+      - uses: Homebrew/actions/setup-homebrew@56e6e1830b3c103b917ea1a7d175dcf99b62e6fc
+        with:
+          token: ${{ github.token }}
+      - name: Check out released CLI validation helpers
+        uses: actions/checkout@v6
+        with:
+          repository: bibleit-labs/bibleit-cli
+          ref: ${{ inputs.version }}
+          path: .ci-cli
+          token: ${{ secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
+          persist-credentials: false
+      - name: Download and verify released formula and archives
+        env:
+          GH_TOKEN: ${{ secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
+        run: |
+          gh release download "$VERSION" --repo bibleit-labs/bibleit-cli --dir artifacts \
+            --pattern 'bibleit-cli.rb' --pattern 'manifest.json' --pattern 'checksums.txt' \
+            --pattern "bibleit_${VERSION#v}_darwin_*.tar.gz" \
+            --pattern "bibleit_${VERSION#v}_linux_*.tar.gz"
+          python3 scripts/update_formula.py --version "$VERSION" --assets artifacts --output verified.rb
+          cmp verified.rb Formula/bibleit-cli.rb
+      - name: Install, test, reinstall and uninstall in isolated Homebrew prefix
+        run: python3 .ci-cli/scripts/check_homebrew.py --assets artifacts --formula Formula/bibleit-cli.rb --report build/validation/homebrew.json
+      - name: Save validation evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: homebrew-${{ matrix.os }}
+          path: build/validation/
+          if-no-files-found: ignore

@@ -22,7 +22,7 @@ class FormulaUpdateTests(unittest.TestCase):
                 lines += [f'  url "https://github.com/bibleit-labs/bibleit-cli/releases/download/{self.version}/{name}"', f'  sha256 "{hashes[name]}"']
         self.formula = '\n'.join(lines + ['end', ''])
         (self.assets / 'bibleit-cli.rb').write_text(self.formula)
-        self.manifest = dict(version=self.version, local_only=False, dirty=False, artifacts=hashes)
+        self.manifest = dict(version=self.version, local_only=False, dirty=False, artifacts=hashes, client=dict(workspace=False, Version="v0.0.0-20261011144051-464d86d7dd41", Sum="h1:fixture"))
         self.write_manifest()
         (self.assets / 'checksums.txt').write_text(''.join(f'{sha}  {name}\n' for name, sha in hashes.items()))
 
@@ -68,3 +68,10 @@ class FormulaUpdateTests(unittest.TestCase):
         self.write_manifest()
         with self.assertRaises(ValueError):
             verified_formula(self.version, self.assets)
+
+    def test_workspace_or_unpinned_client_is_rejected(self):
+        for client in ({}, dict(workspace=True, Version='v0.1.0', Sum='h1:fixture'), dict(workspace=False, Version='v0.1.0')):
+            self.manifest['client'] = client
+            self.write_manifest()
+            with self.assertRaises(ValueError):
+                verified_formula(self.version, self.assets)

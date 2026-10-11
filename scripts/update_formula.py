@@ -17,6 +17,9 @@ def verified_formula(version, assets):
     manifest = json.loads((assets / 'manifest.json').read_text())
     if manifest.get('version') != version or manifest.get('local_only') is not False or manifest.get('dirty') is not False:
         raise ValueError('release must contain a clean production manifest for the selected version')
+    client = manifest.get('client', {})
+    if client.get('workspace') is not False or not client.get('Version') or not client.get('Sum'):
+        raise ValueError('release must use a pinned, checksummed standalone Go client')
     checksums = {}
     for line in (assets / 'checksums.txt').read_text().splitlines():
         sha, name = line.split()
