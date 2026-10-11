@@ -34,7 +34,14 @@ jobs:
         run: |
           python3 scripts/update_formula.py --version "$VERSION" --validate-version
           bash scripts/check_cli_access.sh
+          if [ -n "$CANDIDATE_RUN" ]; then
+            [[ "$CANDIDATE_RUN" =~ ^[0-9]+$ ]] || { echo 'Invalid candidate run ID'; exit 1; }
+            gh api "repos/bibleit-labs/bibleit-cli/actions/runs/$CANDIDATE_RUN" --silent
+          fi
           if [ -z "$CANDIDATE_RUN" ]; then gh release view "$VERSION" --repo bibleit-labs/bibleit-cli --json isDraft --jq 'if .isDraft then error("release is still a draft") else . end'; fi
+      - uses: Homebrew/actions/setup-homebrew@56e6e1830b3c103b917ea1a7d175dcf99b62e6fc
+        with:
+          token: ${{ github.token }}
       - name: Download and verify released formula and archives
         env:
           GH_TOKEN: ${{ github.event.repository.private && secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
@@ -66,9 +73,6 @@ jobs:
           fi
           python3 scripts/update_formula.py --version "$VERSION" --assets artifacts --output verified.rb
           cmp verified.rb Formula/bibleit-cli.rb
-      - uses: Homebrew/actions/setup-homebrew@56e6e1830b3c103b917ea1a7d175dcf99b62e6fc
-        with:
-          token: ${{ github.token }}
       - name: Install, test, reinstall and uninstall in isolated Homebrew prefix
         run: python3 scripts/check_released_homebrew.py --helper scripts/check_homebrew.py --assets artifacts --formula Formula/bibleit-cli.rb --report build/validation/homebrew.json
       - name: Save validation evidence
