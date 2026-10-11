@@ -1,28 +1,30 @@
-# Private v0.0.2 formula preparation
+# Private corrected formula preparation
 
-Prepared 2026-10-11 on release/v0.0.2; main remains on v0.0.1. No existing
-release assets or repository visibility settings were changed.
+Prepared 2026-10-11 on release/v0.0.2. Main and all repositories remain private;
+no merge, release/tag, old-asset or visibility changes were made.
 
-The proposed formula was refreshed from verified documentation candidate
-b802ea3fa74ef1d1b34d4173b3ef1ee51724f9d6 (CLI run 38176529757). All six target
-archives contain LICENSE, THIRD_PARTY_NOTICES and the corrected README. The
-formula installs both notices in pkgshare. The updater checks unique nonempty
-notices and identical bytes across its four archives; all 13 regressions passed.
+The formula matches frozen CLI source f0c080c1505346aee78dde9e0e24f80bb9d76a74,
+[successful candidate run 38177668163](https://github.com/bibleit-labs/bibleit-cli/actions/runs/38177668163).
+All six archives contain exact LICENSE, THIRD_PARTY_NOTICES and the version-free
+README. The formula installs both notices in pkgshare. The updater rejects
+missing/inconsistent notices; all 13 regressions passed.
 
-That CLI candidate passed native Linux, macOS Homebrew, Windows PowerShell 7/5.1,
-parser/failure checks and the full Scoop lifecycle. Windows validation resumed
-on owner instruction. Tap syntax/style CI passed for commit 2594b4f in runs
-38176888008 and 38176884728.
+[Tap native validation 38178224204](https://github.com/bibleit-labs/homebrew-tap/actions/runs/38178224204)
+passed at ab1fc27f1ef7b3722ac6a5648df1949d30072a96 on Darwin arm64 and Linux x86_64.
+Both jobs verified candidate provenance, archive hashes and exact formula, then
+install/test/reinstall, completions, exact notices and uninstall in isolated
+prefixes. Formula SHA256: 4bc0c10b2c36daf838240a2d11685bfcccbf240eeb039497124f289e9364fc1a.
+Syntax/style run 38178072711 passed. The CLI candidate also passed native Windows
+AMD64 PowerShell 7/5.1 and Scoop checks. Windows arm64 runtime was not exercised.
 
-The final README now records Windows success, and CI uses pinned Actions plus
-conditional private/public dependency access. A fresh final candidate and matching
-formula comparison are being completed. Tap-owned native Linux/macOS validation
-must consume the exact successful final candidate, not an earlier run. The
-private read secret needs Actions read for artifacts and Contents read for
-releases; public mode uses the scoped GitHub token instead.
+The private token now has working Actions/Contents read access. Permission
+preflight occurs before Homebrew setup; artifact download follows setup because
+setup replaces the checkout. Public mode uses the scoped GitHub token. Public
+anonymous downloads and normal-prefix installation remain approved-cutover checks.
 
-Do not merge this formula into main or offer it as an available installation
-until the matching corrected release is ready. Recommended old-release handling:
-retain the v0.0.1 tag/source history and withdraw its 12 downloadable assets,
-plus audited deficient historical CI package artifacts, after owner approval.
-The complete evidence and proposal are in bibleit-cli docs/release-v0.0.2-readiness.md.
+Do not merge until the matching corrected release is approved and available.
+Recommended old-release handling: preserve v0.0.1 tag/source history, withdraw its
+12 assets and audited deficient historical CI artifacts after owner approval.
+The complete hashes, native evidence and cleanup proposals are recorded in
+bibleit-cli docs/release-v0.0.2-readiness.md. Later evidence-only documentation
+commits do not alter the tested formula or packaged inputs.
