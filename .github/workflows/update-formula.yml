@@ -25,11 +25,11 @@ jobs:
         run: python3 scripts/update_formula.py --version "$VERSION" --validate-version
       - name: Verify CLI release read access
         env:
-          GH_TOKEN: ${{ github.event.repository.private && secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: bash scripts/check_cli_access.sh
       - name: Download published CLI formula and archives
         env:
-          GH_TOKEN: ${{ github.event.repository.private && secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh release view "$VERSION" --repo bibleit-labs/bibleit-cli --json isDraft --jq 'if .isDraft then error("draft release is not publishable") else . end'
           gh release download "$VERSION" --repo bibleit-labs/bibleit-cli --dir artifacts \

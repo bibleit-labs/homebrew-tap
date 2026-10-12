@@ -39,8 +39,8 @@ release formula workflow accepts a published version and opens a reviewable PR;
 it never merges or publishes the CLI release. Do not run it for an unpublished
 candidate. Use Conventional Commits such as `fix(formula): retain redistribution notices`.
 
-Published release reads use the workflow's read-scoped GitHub token. The optional
-private-candidate path retains a maintainer read secret for restricted inputs. The updater's own job uses scoped
+Public release and candidate reads use the workflow's GitHub token; no stored
+personal access token is required. The updater's own job uses scoped
 contents/pull-request write permissions for its branch/PR. Organization/repository
 policy must permit PR creation; bot PRs may need manual validation dispatch.
 Tokens are for maintainer validation, not embedded customer download credentials.
@@ -49,7 +49,7 @@ Tokens are for maintainer validation, not embedded customer download credentials
 
 Validate Homebrew package runs native macOS/Linux install/test/reinstall,
 completions, exact notice retention and uninstall on the formula review branch.
-Set candidate_run_id for a successful private CLI candidate run; omit it for a
+Set candidate_run_id for a successful public CLI candidate run; omit it for a
 published release. Both paths verify the branch formula against the exact inputs.
 
 For an authorized local reviewer with RUN_ID set to a successful candidate run:
