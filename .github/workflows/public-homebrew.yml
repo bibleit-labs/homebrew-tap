@@ -1,0 +1,31 @@
+name: Validate public Homebrew installation
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  install:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: Homebrew/actions/setup-homebrew@56e6e1830b3c103b917ea1a7d175dcf99b62e6fc
+        with:
+          token: ''
+          brew-gh-api-token: ''
+      - name: Require a public repository
+        env:
+          PRIVATE_REPOSITORY: ${{ github.event.repository.private }}
+        run: test "$PRIVATE_REPOSITORY" = false
+      - name: Anonymous public install, test, reinstall and uninstall
+        run: python3 scripts/check_public_homebrew.py
+      - name: Save public validation evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: public-homebrew-${{ matrix.os }}
+          path: build/validation/public-homebrew.json
+          if-no-files-found: ignore
