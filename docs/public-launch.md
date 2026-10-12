@@ -29,6 +29,7 @@ outside this release. Existing releases remain immutable; updated main README
 copy will enter a future package release. The obsolete private CLI read-secret
 copy was removed after checking repository/workflow references and the owner
 confirmed the token was not reused elsewhere. Release/candidate reads use the
-generated workflow token; no stored PAT is required. Underlying account-token
-revocation still awaits GitHub reauthentication. See the
+generated workflow token; no stored PAT is required. The underlying account tokens
+were subsequently identified, their repository permissions checked, and both
+revoked in owner-authenticated GitHub settings. See the
 [cleanup assessment](https://github.com/bibleit-labs/bibleit-cli/blob/main/docs/security/private-read-secret-cleanup-2026-10-12.json).
