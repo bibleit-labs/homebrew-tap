@@ -51,9 +51,26 @@ were subsequently identified, their repository permissions checked, and both
 revoked in owner-authenticated GitHub settings. See the
 [cleanup assessment](https://github.com/bibleit-labs/bibleit-cli/blob/main/docs/security/private-read-secret-cleanup-2026-10-12.json).
 
-## Next formula: staged, awaiting approval
+## CLI v0.0.3 formula — published and verified
 
-The [v0.0.3 staged formula](release-v0.0.3.md) passed all four native Homebrew
-lifecycles against the successful frozen CLI candidate. [PR #11](https://github.com/bibleit-labs/homebrew-tap/pull/11)
-remains unmerged. The live formula and existing release assets remain unchanged.
-Anonymous v0.0.3 installation requires the approved CLI publication and tap merge.
+Owner-approved publication completed on 2026-10-12. [v0.0.3](https://github.com/bibleit-labs/bibleit-cli/releases/tag/v0.0.3) is latest
+stable with title `v0.0.3`; all twelve assets and provenance matched the approval
+record on anonymous retrieval. [PR #11](https://github.com/bibleit-labs/homebrew-tap/pull/11)
+merged the exact normalized formula through protection at
+`65bff4e45fa8075619ec7afc47b1f4f70c1eeb31`.
+
+[Anonymous Homebrew checks](https://github.com/bibleit-labs/homebrew-tap/actions/runs/38248930792) passed native macOS ARM64/Intel and
+Linux AMD64/ARM64, using empty caches, public URLs and normal prefixes.
+Install/test/reinstall/uninstall, native architecture, approved executable hashes,
+notice retention, completions and root/auth help passed with legacy configuration
+preserved. [Anonymous script installers](https://github.com/bibleit-labs/bibleit-cli/actions/runs/38249509803) passed all six targets,
+including Windows AMD64/ARM64 PowerShell 7 and 5.1. The local real Homebrew upgrade
+from v0.0.2 to v0.0.3 also passed without changing credential or shell files.
+See [release evidence](release-v0.0.3.md) and
+[the publication record](release-v0.0.3-validation.json).
+
+The README now focuses on installation, updates, completion setup and support.
+CI artifact review commands live in [the maintainer guide](maintenance.md).
+No publication or installation gate remains pending. Older releases are unchanged;
+the private service repository remains private. Intel macOS remains Homebrew Tier 3;
+signing/notarization and a public Scoop bucket are separate work.
