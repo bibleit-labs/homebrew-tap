@@ -16,8 +16,8 @@ bibleit auth login
 The repository name homebrew-tap gives the identifier bibleit-labs/tap. The formula
 selects macOS/Linux amd64/arm64 archives and installs Bash/Zsh/Fish completions,
 LICENSE and THIRD_PARTY_NOTICES. Runtime binaries need no Go or Python installation;
-SSH commands need OpenSSH. Supported package builds do not prove native validation
-on every architecture. Account/translation access is separate from repository access.
+SSH commands need OpenSSH. Using the service requires the relevant account
+permissions and translation access.
 
 For updates and uninstall:
 
@@ -30,54 +30,21 @@ brew uninstall bibleit-cli
 See [the CLI README](https://github.com/bibleit-labs/bibleit-cli#readme) for commands,
 authentication, Windows and script installers, and compatibility limits.
 
-## Formula maintenance
+## Shell completion
 
-The CLI generates the formula from frozen archives. This tap verifies manifest
-eligibility, hashes, notice contents and installed notices. Stable versions are
-inferred from release URLs; prereleases retain explicit versions. The Update
-release formula workflow accepts a published version and opens a reviewable PR;
-it never merges or publishes the CLI release. Do not run it for an unpublished
-candidate. Use Conventional Commits such as `fix(formula): retain redistribution notices`.
+Homebrew installs Bash, Zsh and Fish completion files. Your shell must load them;
+installation does not change your shell startup files. Follow the
+[Homebrew completion setup](https://github.com/bibleit-labs/bibleit-cli#homebrew-shell-setup)
+in the CLI guide.
 
-Public release and candidate reads use the workflow's GitHub token; no stored
-personal access token is required. The updater's own job uses scoped
-contents/pull-request write permissions for its branch/PR. Organization/repository
-policy must permit PR creation; bot PRs may need manual validation dispatch.
-Tokens are for maintainer validation, not embedded customer download credentials.
+## Support and contributing
 
-## Candidate and release validation
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the [maintainer guide](docs/maintenance.md)
+for formula updates and validation. [Public launch evidence](docs/public-launch.md)
+records installation checks. Intel macOS follows
+[Homebrew Tier 3](https://docs.brew.sh/Support-Tiers) support.
+Report vulnerabilities privately through [SECURITY.md](SECURITY.md).
 
-Validate Homebrew package runs on macOS ARM64/Intel and Linux amd64/ARM64,
-covering install/test/reinstall,
-completions, exact notice retention and uninstall on the formula review branch.
-Set candidate_run_id for a successful public CLI candidate run; omit it for a
-published release. Both paths verify the branch formula against the exact inputs.
-
-For an authorized local reviewer with RUN_ID set to a successful candidate run:
-
-```sh
-: "${RUN_ID:?Set RUN_ID to a verified CLI candidate run}"
-gh run download "$RUN_ID" --repo bibleit-labs/bibleit-cli \
-  --name candidate-assets --dir artifacts/candidate
-python3 scripts/check_released_homebrew.py --assets artifacts/candidate \
-  --formula Formula/bibleit-cli.rb --helper scripts/check_homebrew.py \
-  --report artifacts/homebrew-validation.json
-```
-
-Use the matching review branch. For an approved published version, replace the
-download command with gh release download for that version. Local fixtures retain
-production hashes/install methods and rewrite only download URLs to local files.
-The Homebrew sandbox remains enabled. This does not prove unauthenticated access.
-
-Anonymous install/test/reinstall/uninstall passed on macOS ARM64/Intel and
-Linux amd64/ARM64 with empty caches at the standard Homebrew prefixes. The
-harness verifies host and installed binary architectures and rejects Rosetta.
-Intel macOS remains [Homebrew Tier 3](https://docs.brew.sh/Support-Tiers). See
-[public launch evidence](docs/public-launch.md) and the dated
-[release preparation](docs/release-readiness.md). Packaged README changes require
-fresh candidate archives and matching formula hashes before release approval.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md), [workflows](.github/workflows), and
-[SECURITY.md](SECURITY.md). Tap source is [MIT licensed](LICENSE); redistributed
-CLI binaries also retain their own third-party notices. Software licensing does
-not grant rights to Bible translations returned by the service.
+Tap source is [MIT licensed](LICENSE); CLI packages retain their third-party
+notices. Software licensing does not grant rights to Bible translations returned
+by the service.
