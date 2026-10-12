@@ -3,14 +3,9 @@
 Homebrew formulae for the [Bibleit CLI](https://github.com/bibleit-labs/bibleit-cli).
 The package name is **bibleit-cli**; the executable is **bibleit**.
 
-## Availability and planned installation
+## Installation
 
-The tap and CLI release assets remain **private**. Corrected packages and notice
-retention are being prepared for review. Public installation awaits approval.
-[Release preparation](docs/release-readiness.md) records the remaining gates.
-Making the tap public alone would not make private CLI downloads accessible.
-
-After the matching corrected release and public access are approved:
+The tap and CLI release assets are public. Install the verified package with:
 
 ```sh
 brew install bibleit-labs/tap/bibleit-cli
@@ -24,7 +19,7 @@ LICENSE and THIRD_PARTY_NOTICES. Runtime binaries need no Go or Python installat
 SSH commands need OpenSSH. Supported package builds do not prove native validation
 on every architecture. Account/translation access is separate from repository access.
 
-For updates/uninstall after installation becomes available:
+For updates and uninstall:
 
 ```sh
 brew update
@@ -44,8 +39,8 @@ release formula workflow accepts a published version and opens a reviewable PR;
 it never merges or publishes the CLI release. Do not run it for an unpublished
 candidate. Use Conventional Commits such as `fix(formula): retain redistribution notices`.
 
-While inputs are private, BIBLEIT_CLI_READ_TOKEN needs Contents read on the CLI,
-plus Actions read for candidate artifacts. The updater's own job uses scoped
+Published release reads use the workflow's read-scoped GitHub token. The optional
+private-candidate path retains a maintainer read secret for restricted inputs. The updater's own job uses scoped
 contents/pull-request write permissions for its branch/PR. Organization/repository
 policy must permit PR creation; bot PRs may need manual validation dispatch.
 Tokens are for maintainer validation, not embedded customer download credentials.
@@ -73,7 +68,9 @@ download command with gh release download for that version. Local fixtures retai
 production hashes/install methods and rewrite only download URLs to local files.
 The Homebrew sandbox remains enabled. This does not prove unauthenticated access.
 
-Current installation evidence and remaining gates are in
+Anonymous install/test/reinstall/uninstall passed on macOS ARM64 and Linux x86_64
+with empty caches at the standard Homebrew prefixes. See
+[public launch evidence](docs/public-launch.md) and the dated
 [release preparation](docs/release-readiness.md). Packaged README changes require
 fresh candidate archives and matching formula hashes before release approval.
 
