@@ -1,8 +1,8 @@
 # Public launch evidence
 
 Completed 2026-10-12 in SDK → CLI → tap order after owner approval. The tap,
-SDK and corrected CLI release are public. bibleit-server stays private; its
-public client guides and rendered command protocol are deployed and verified.
+SDK and corrected CLI release are public. The service implementation repository
+stays private; its public client guides and rendered command protocol are deployed and verified.
 Server Markdown and HTTP/WebSocket implementation guides are excluded. Main and v* release tags have active protection
 rulesets without bypass actors. Main requires a reviewed PR path, current test-bot
 checks, resolved discussions and linear history; force pushes/deletion and tag
