@@ -28,7 +28,11 @@ Pushes/PRs normally run Homebrew syntax/style and updater regressions. Docs-only
 changes need content/link review. The Validate Homebrew package workflow accepts
 a published version or a successful public CLI candidate run ID. Candidate mode
 verifies repository/workflow/event/source/version before comparing the formula
-and installing local archives in disposable native macOS/Linux prefixes.
+and installing local archives in disposable native macOS/Linux prefixes. Both
+package validation and anonymous public validation cover macos-15,
+macos-15-intel, ubuntu-24.04 and ubuntu-24.04-arm. The harness verifies native
+host and installed binary architecture; Rosetta execution is rejected. Public
+validation uses empty caches, ordinary public URLs and standard prefixes.
 
 Workflows use their GitHub token for public release and candidate reads; no stored
 personal access token is required. Do not put GitHub credentials in formula URLs. Review the

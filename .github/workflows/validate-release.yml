@@ -18,10 +18,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-15, ubuntu-24.04]
+        os: [macos-15, macos-15-intel, ubuntu-24.04, ubuntu-24.04-arm]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 20
     env:
+      EXPECTED_HOMEBREW_RUNNER: ${{ matrix.os }}
       VERSION: ${{ inputs.version }}
       CANDIDATE_RUN: ${{ inputs.candidate_run_id }}
     steps:

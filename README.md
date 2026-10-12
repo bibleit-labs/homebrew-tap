@@ -47,7 +47,8 @@ Tokens are for maintainer validation, not embedded customer download credentials
 
 ## Candidate and release validation
 
-Validate Homebrew package runs native macOS/Linux install/test/reinstall,
+Validate Homebrew package runs on macOS ARM64/Intel and Linux amd64/ARM64,
+covering install/test/reinstall,
 completions, exact notice retention and uninstall on the formula review branch.
 Set candidate_run_id for a successful public CLI candidate run; omit it for a
 published release. Both paths verify the branch formula against the exact inputs.
@@ -68,8 +69,10 @@ download command with gh release download for that version. Local fixtures retai
 production hashes/install methods and rewrite only download URLs to local files.
 The Homebrew sandbox remains enabled. This does not prove unauthenticated access.
 
-Anonymous install/test/reinstall/uninstall passed on macOS ARM64 and Linux x86_64
-with empty caches at the standard Homebrew prefixes. See
+Anonymous install/test/reinstall/uninstall passed on macOS ARM64/Intel and
+Linux amd64/ARM64 with empty caches at the standard Homebrew prefixes. The
+harness verifies host and installed binary architectures and rejects Rosetta.
+Intel macOS remains [Homebrew Tier 3](https://docs.brew.sh/Support-Tiers). See
 [public launch evidence](docs/public-launch.md) and the dated
 [release preparation](docs/release-readiness.md). Packaged README changes require
 fresh candidate archives and matching formula hashes before release approval.
