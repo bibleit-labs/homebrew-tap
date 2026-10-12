@@ -44,6 +44,15 @@ Linux amd64/ARM64 with empty caches at the standard Homebrew prefixes. The
 harness verifies host and installed binary architectures and rejects Rosetta.
 Intel macOS remains [Homebrew Tier 3](https://docs.brew.sh/Support-Tiers). See
 [public launch evidence](public-launch.md) and the dated
-[release preparation](release-readiness.md). Packaged README changes require
+[release evidence](release-v0.0.3.md). Packaged README changes require
 fresh candidate archives and matching formula hashes before release approval.
 
+## Launch and audit evidence
+
+[Public launch evidence](public-launch.md) records installation checks, repository
+protections and completed publication actions. Use the dated release reports for
+the exact tested inputs; passing historical checks does not qualify a new formula.
+The CLI's [security audit](https://github.com/bibleit-labs/bibleit-cli/blob/main/docs/security-audit.md)
+and [licensing audit](https://github.com/bibleit-labs/bibleit-cli/blob/main/docs/licensing-audit.md)
+cover the shared distribution review. Keep raw credentials and unredacted reports
+outside Git; report vulnerabilities through [SECURITY.md](../SECURITY.md).
