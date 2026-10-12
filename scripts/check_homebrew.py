@@ -92,6 +92,17 @@ def main():
         binary_architecture = verify_binary(binary, host)
         expected = f'bibleit CLI version {version}'
         assert subprocess.check_output([str(binary), 'version'], text=True).strip() == expected
+        config = scratch / 'legacy-config.json'
+        config.write_text('{"version":0}\n')
+        original_config = config.read_bytes()
+        ux_env = dict(env, BIBLEIT_CONFIG=str(config))
+        help_result = subprocess.run([str(binary), '--help'], env=ux_env, text=True, capture_output=True, timeout=30)
+        assert help_result.returncode == 0 and 'Bibleit CLI: read Scripture' in help_result.stdout
+        for format in ('table', 'json'):
+            result = subprocess.run([str(binary), 'auth', '--format', format], env=ux_env, text=True, capture_output=True, timeout=30)
+            assert result.returncode == 0 and not result.stderr, result.stdout + result.stderr
+            assert 'bibleit auth login' in result.stdout
+            assert config.read_bytes() == original_config
         before = hashlib.sha256(binary.read_bytes()).hexdigest()
         for path in ('etc/bash_completion.d/bibleit', 'share/zsh/site-functions/_bibleit', 'share/fish/vendor_completions.d/bibleit.fish'):
             assert (prefix / path).is_file(), path
@@ -116,7 +127,7 @@ def main():
         assert not (prefix / 'Cellar' / formula_name).exists()
     report = Path(args.report)
     report.parent.mkdir(parents=True, exist_ok=True)
-    report.write_text(json.dumps({'native_host': host, 'binary': binary_architecture, 'binary_sha256': before, 'platform': os.uname().sysname, 'architecture': os.uname().machine, 'version': version, 'local_cli_archives': True, 'isolated_prefix': True, 'redistribution_notices_verified': True, 'checks': evidence}, indent=2) + '\n')
+    report.write_text(json.dumps({'native_host': host, 'binary': binary_architecture, 'binary_sha256': before, 'platform': os.uname().sysname, 'architecture': os.uname().machine, 'version': version, 'local_cli_archives': True, 'isolated_prefix': True, 'redistribution_notices_verified': True, 'bare_auth_legacy_config_preserved': True, 'root_help_verified': True, 'checks': evidence}, indent=2) + '\n')
     print(f'PASS: Homebrew install/test/reinstall/completions/uninstall; report {report}')
 
 
