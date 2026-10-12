@@ -15,12 +15,12 @@ Never invent hashes or treat a locally dirty/workspace candidate as publishable.
 
 ```sh
 python3 -B -m unittest discover -s scripts -p 'test_*.py'
-python3 scripts/update_formula.py --version v0.0.2 --assets artifacts/v0.0.2
+: "${VERSION:?Set VERSION to the verified release tag}"
+python3 scripts/update_formula.py --version "$VERSION" --assets "artifacts/$VERSION"
 ```
 
-The example needs verified v0.0.2 inputs. Main uses the corrected published
-v0.0.2 formula. Older notice-deficient packages are intentionally
-rejected. Update both the generated formula and relevant docs together.
+The example needs the verified assets for that release. Older notice-deficient
+packages are rejected. Update both the generated formula and relevant docs together.
 
 ## Installation checks
 
@@ -36,13 +36,13 @@ validation uses empty caches, ordinary public URLs and standard prefixes.
 
 Workflows use their GitHub token for public release and candidate reads; no stored
 personal access token is required. Do not put GitHub credentials in formula URLs. Review the
-script/options and [README](README.md) for authenticated fixture commands.
+script/options and [maintainer guide](docs/maintenance.md) for artifact validation commands.
 These checks do not establish anonymous downloads or customer installation.
 
 Windows PowerShell 7/5.1 and Scoop checks passed on the final candidate.
 The tap's native macOS/Linux lifecycle checks passed on those exact artifacts.
 See [public launch evidence](docs/public-launch.md) and the dated
-[release evidence](docs/release-v0.0.2.md) for source and run references. Match a
+[release evidence](docs/release-v0.0.3.md) for source and run references. Match a
 verified published release before merging formula changes. Retain the upstream MIT
 notice and all binary component notices; the formula's MIT metadata does not
 relicense Go dependencies or Bible translation data.
