@@ -1,0 +1,213 @@
+{
+  "date": "2026-10-12",
+  "status": "prepared-awaiting-approval",
+  "release_title": "v0.0.3",
+  "cli_candidate": {
+    "run_id": 38244704911,
+    "url": "https://github.com/bibleit-labs/bibleit-cli/actions/runs/38244704911",
+    "source_commit": "0e1fc6f0b1a1cb734f5b54827f7e0319bb9f3280",
+    "event": "workflow_dispatch",
+    "conclusion": "success",
+    "artifact": {
+      "id": 11745595179,
+      "name": "candidate-assets",
+      "digest": "sha256:1cb1fd8c92ca554b52ce0a609a822c72d0e0be6983b2472109387da51a737bf4",
+      "expired": false
+    }
+  },
+  "cli_manifest": {
+    "version": "v0.0.3",
+    "commit": "0e1fc6f0b1a1cb734f5b54827f7e0319bb9f3280",
+    "dirty": false,
+    "local_only": false,
+    "go": "1.27.1",
+    "client": {
+      "Path": "github.com/bibleit-labs/bibleit-go",
+      "Version": "v0.0.1",
+      "GoVersion": "1.27.1",
+      "Sum": "h1:cOH6TJ2iLncj7xpbBUG7kkDFwXLZi1cF6l+DQy5w27o=",
+      "workspace": false
+    },
+    "artifacts": {
+      "bibleit_0.0.3_darwin_amd64.tar.gz": "599c3fd0d4a75db12f411d6f7c26e69f2b4b875b5aeede153e231db6b10be171",
+      "bibleit_0.0.3_darwin_arm64.tar.gz": "57c3ea300a90824f10e516a520521aca6543cd4dd5a6971699b08916f5d91bb6",
+      "bibleit_0.0.3_linux_amd64.tar.gz": "26e1b3730ddabeb308e6996a6aa92734b4f41eb531dbf963309dcbab54541caa",
+      "bibleit_0.0.3_linux_arm64.tar.gz": "201cab58874af4195c5abaf0f4c16bbf6f26bfd7f0e48bd0a7a199a206ea62db",
+      "bibleit_0.0.3_windows_amd64.zip": "cdb5d1ea9d3b74ba5c8cec07a99fd47658368fc2c8778f970102e02ecd8a5bb4",
+      "bibleit_0.0.3_windows_arm64.zip": "3a9d72db13f82394a23888d215a20d0020cf6abf4daa0df166b7e09e910798c4",
+      "install.sh": "0e01b88839185faa985fd578c16c0c57c71cdb17e4520f27d75bac8e7b184b61",
+      "install.ps1": "9d8d4fa8a0464e5edaccd561390b4f49c6254c203e5ef5eaa72021e77627b091"
+    }
+  },
+  "asset_sha256": {
+    "bibleit-cli.rb": "4171f9643b6a36f091ae799f87d1af7b9b08954913554666bf6e9a581b2c0c97",
+    "bibleit.json": "64f9eab7edbb69c9fd753ca56eb2cdfff7c074472a5210462d192cb9557e1977",
+    "bibleit_0.0.3_darwin_amd64.tar.gz": "599c3fd0d4a75db12f411d6f7c26e69f2b4b875b5aeede153e231db6b10be171",
+    "bibleit_0.0.3_darwin_arm64.tar.gz": "57c3ea300a90824f10e516a520521aca6543cd4dd5a6971699b08916f5d91bb6",
+    "bibleit_0.0.3_linux_amd64.tar.gz": "26e1b3730ddabeb308e6996a6aa92734b4f41eb531dbf963309dcbab54541caa",
+    "bibleit_0.0.3_linux_arm64.tar.gz": "201cab58874af4195c5abaf0f4c16bbf6f26bfd7f0e48bd0a7a199a206ea62db",
+    "bibleit_0.0.3_windows_amd64.zip": "cdb5d1ea9d3b74ba5c8cec07a99fd47658368fc2c8778f970102e02ecd8a5bb4",
+    "bibleit_0.0.3_windows_arm64.zip": "3a9d72db13f82394a23888d215a20d0020cf6abf4daa0df166b7e09e910798c4",
+    "checksums.txt": "b0c57e52966ce6cd713fa34dbf5867da359d4bdf8b7d9c8c364662fce8307687",
+    "install.ps1": "9d8d4fa8a0464e5edaccd561390b4f49c6254c203e5ef5eaa72021e77627b091",
+    "install.sh": "0e01b88839185faa985fd578c16c0c57c71cdb17e4520f27d75bac8e7b184b61",
+    "manifest.json": "db580d4c1eb2424e94041a09b4b5fff5d36a0db3d24d0157b6d68b5383c6f9e8"
+  },
+  "homebrew": {
+    "run_id": 38245499054,
+    "url": "https://github.com/bibleit-labs/homebrew-tap/actions/runs/38245499054",
+    "source_commit": "2f472a026ffe875f16b128d8d47f641056adbab7",
+    "conclusion": "success",
+    "tap_formula_sha256": "72ab4b7a3dce4083b51342be5bcf257d0de31afd28b80a860107377d3c590913",
+    "validation_helper_sha256": "3cf2207edf6ad0e09cd962fcdf558e8063703a62b829d321a0b773e989e9491e",
+    "targets": {
+      "macos-15": {
+        "native_host": {
+          "runner": "macos-15",
+          "system": "Darwin",
+          "machine": "arm64",
+          "architecture": "arm64",
+          "translated": false
+        },
+        "binary": {
+          "system": "Darwin",
+          "architecture": "arm64",
+          "matches_native_host": true
+        },
+        "binary_sha256": "a8773a6847fe22b3c6b40b4455c48a38475286c45b9fd2f180eb63f846eed338",
+        "version": "0.0.3",
+        "isolated_prefix": true,
+        "local_cli_archives": true,
+        "redistribution_notices_verified": true,
+        "bare_auth_legacy_config_preserved": true,
+        "root_help_verified": true,
+        "core_metadata_source": "runner cache",
+        "core_metadata_commit": "a7496e08a4f47d93bf30ba518e3dfae9f1dbab3b",
+        "git_configuration_isolated": true,
+        "fixture_explicit_version": true,
+        "checks": [
+          "--prefix",
+          "install",
+          "test",
+          "reinstall",
+          "test",
+          "uninstall"
+        ]
+      },
+      "macos-15-intel": {
+        "native_host": {
+          "runner": "macos-15-intel",
+          "system": "Darwin",
+          "machine": "x86_64",
+          "architecture": "amd64",
+          "translated": false
+        },
+        "binary": {
+          "system": "Darwin",
+          "architecture": "amd64",
+          "matches_native_host": true
+        },
+        "binary_sha256": "fc37e8ebd87b5931a4e709e9be17e861de0366712b018fdd409a1cee72119ccc",
+        "version": "0.0.3",
+        "isolated_prefix": true,
+        "local_cli_archives": true,
+        "redistribution_notices_verified": true,
+        "bare_auth_legacy_config_preserved": true,
+        "root_help_verified": true,
+        "core_metadata_source": "runner cache",
+        "core_metadata_commit": "a18de1aa60a07cc0b90be90c00ffffa6a7a787bb",
+        "git_configuration_isolated": true,
+        "fixture_explicit_version": true,
+        "checks": [
+          "--prefix",
+          "install",
+          "test",
+          "reinstall",
+          "test",
+          "uninstall"
+        ]
+      },
+      "ubuntu-24.04": {
+        "native_host": {
+          "runner": "ubuntu-24.04",
+          "system": "Linux",
+          "machine": "x86_64",
+          "architecture": "amd64",
+          "translated": false
+        },
+        "binary": {
+          "system": "Linux",
+          "architecture": "amd64",
+          "matches_native_host": true
+        },
+        "binary_sha256": "7c12654d941de2864603207d24411cb9b7e1ab4032c98d83bea437c6b8d10d1a",
+        "version": "0.0.3",
+        "isolated_prefix": true,
+        "local_cli_archives": true,
+        "redistribution_notices_verified": true,
+        "bare_auth_legacy_config_preserved": true,
+        "root_help_verified": true,
+        "core_metadata_source": "public shallow clone",
+        "core_metadata_commit": "72a96b0494a8d1e9bd0455eac883dbfc8f896e8f",
+        "git_configuration_isolated": true,
+        "fixture_explicit_version": true,
+        "checks": [
+          "--prefix",
+          "install",
+          "test",
+          "reinstall",
+          "test",
+          "uninstall"
+        ]
+      },
+      "ubuntu-24.04-arm": {
+        "native_host": {
+          "runner": "ubuntu-24.04-arm",
+          "system": "Linux",
+          "machine": "aarch64",
+          "architecture": "arm64",
+          "translated": false
+        },
+        "binary": {
+          "system": "Linux",
+          "architecture": "arm64",
+          "matches_native_host": true
+        },
+        "binary_sha256": "6e9e9311e2ac87e8922fd519e563b1301da45cc37071873f59f45ecb9c3bd0a0",
+        "version": "0.0.3",
+        "isolated_prefix": true,
+        "local_cli_archives": true,
+        "redistribution_notices_verified": true,
+        "bare_auth_legacy_config_preserved": true,
+        "root_help_verified": true,
+        "core_metadata_source": "public shallow clone",
+        "core_metadata_commit": "72a96b0494a8d1e9bd0455eac883dbfc8f896e8f",
+        "git_configuration_isolated": true,
+        "fixture_explicit_version": true,
+        "checks": [
+          "--prefix",
+          "install",
+          "test",
+          "reinstall",
+          "test",
+          "uninstall"
+        ]
+      }
+    }
+  },
+  "publication": {
+    "tag_created": false,
+    "release_published": false,
+    "tap_formula_merged": false,
+    "anonymous_v0_0_3_checks": "pending publication approval",
+    "previous_v0_0_2_assets": "unchanged",
+    "private_service_repository": "private"
+  },
+  "limits": {
+    "anonymous_release_checks": "require approved publication",
+    "homebrew_intel_macos_support": "Tier 3",
+    "signing_and_notarization": "not included",
+    "public_scoop_bucket": "not maintained",
+    "sdk_and_private_service_changes": "outside this release"
+  }
+}

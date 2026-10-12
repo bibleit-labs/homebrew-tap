@@ -50,3 +50,10 @@ generated workflow token; no stored PAT is required. The underlying account toke
 were subsequently identified, their repository permissions checked, and both
 revoked in owner-authenticated GitHub settings. See the
 [cleanup assessment](https://github.com/bibleit-labs/bibleit-cli/blob/main/docs/security/private-read-secret-cleanup-2026-10-12.json).
+
+## Next formula: staged, awaiting approval
+
+The [v0.0.3 staged formula](release-v0.0.3.md) passed all four native Homebrew
+lifecycles against the successful frozen CLI candidate. [PR #11](https://github.com/bibleit-labs/homebrew-tap/pull/11)
+remains unmerged. The live formula and existing release assets remain unchanged.
+Anonymous v0.0.3 installation requires the approved CLI publication and tap merge.

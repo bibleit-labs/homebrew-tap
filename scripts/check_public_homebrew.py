@@ -3,6 +3,7 @@
 import hashlib
 import json
 import os
+import re
 import platform
 import shutil
 import subprocess
@@ -13,12 +14,18 @@ from pathlib import Path
 from check_homebrew_architecture import native_host, verify_binary
 
 FORMULA = "bibleit-labs/tap/bibleit-cli"
-VERSION = "0.0.2"
 ROOT = Path(__file__).resolve().parent.parent
 
 
 def main():
     host = native_host()
+    formula_source = (ROOT / "Formula/bibleit-cli.rb").read_text()
+    versions = set(re.findall(r"/releases/download/(v[^/]+)/", formula_source))
+    assert len(versions) == 1, "formula must refer to a single release"
+    tag = versions.pop()
+    from update_formula import validate_version
+    validate_version(tag)
+    version = tag[1:]
     env = {k: v for k, v in os.environ.items() if "TOKEN" not in k.upper() and "SECRET" not in k.upper() and not k.startswith("GIT_")}
     env.update(GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_SYSTEM=os.devnull, GIT_TERMINAL_PROMPT="0", HOMEBREW_NO_AUTO_UPDATE="1")
     def run(args):
@@ -31,7 +38,7 @@ def main():
     brew_config = run(["brew", "config"])
     notices = {}
     for name in ("LICENSE", "THIRD_PARTY_NOTICES"):
-        with urllib.request.urlopen("https://raw.githubusercontent.com/bibleit-labs/bibleit-cli/v" + VERSION + "/" + name, timeout=120) as response:
+        with urllib.request.urlopen("https://raw.githubusercontent.com/bibleit-labs/bibleit-cli/v" + version + "/" + name, timeout=120) as response:
             notices[name] = response.read()
     checks = []
     with tempfile.TemporaryDirectory(prefix="bibleit-brew-cache-") as temporary:
@@ -48,8 +55,15 @@ def main():
             binary = installed / "bin/bibleit"
             binary_architecture = verify_binary(binary, host)
             binary_sha256 = hashlib.sha256(binary.read_bytes()).hexdigest()
-            assert run([str(binary), "version"]) == "bibleit CLI version " + VERSION
-            run([str(binary), "--help"])
+            assert run([str(binary), "version"]) == "bibleit CLI version " + version
+            help_output = run([str(binary), "--help"])
+            assert "Bibleit CLI: read Scripture" in help_output
+            config = Path(temporary) / "legacy-config.json"
+            config.write_text('{"version":0}\n')
+            original_config = config.read_bytes()
+            env["BIBLEIT_CONFIG"] = str(config)
+            assert "bibleit auth login" in run([str(binary), "auth"])
+            assert config.read_bytes() == original_config
             for name, expected_bytes in notices.items():
                 assert (installed / "share/bibleit-cli" / name).read_bytes() == expected_bytes
             for path in ("etc/bash_completion.d/bibleit", "share/zsh/site-functions/_bibleit", "share/fish/vendor_completions.d/bibleit.fish"):
@@ -60,7 +74,7 @@ def main():
         checks.append({"operation": "uninstall", "binary_removed": True})
     report = ROOT / "build/validation/public-homebrew.json"
     report.parent.mkdir(parents=True, exist_ok=True)
-    report.write_text(json.dumps({"native_host": host, "brew_config": brew_config, "formula": FORMULA, "version": VERSION, "platform": platform.platform(), "machine": platform.machine(), "prefix": prefix, "credentials": False, "local_archive_overrides": False, "checks": checks}, indent=2) + "\n")
+    report.write_text(json.dumps({"native_host": host, "brew_config": brew_config, "formula": FORMULA, "version": version, "platform": platform.platform(), "machine": platform.machine(), "prefix": prefix, "credentials": False, "local_archive_overrides": False, "checks": checks}, indent=2) + "\n")
 
 
 if __name__ == "__main__":

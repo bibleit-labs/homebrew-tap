@@ -4,22 +4,22 @@ class BibleitCli < Formula
   license "MIT"
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.2/bibleit_0.0.2_darwin_arm64.tar.gz"
-      sha256 "59658e724ad2e0df4600dbfb7253faeb265772d25af620702bb0b8762864b33d"
+      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.3/bibleit_0.0.3_darwin_arm64.tar.gz"
+      sha256 "57c3ea300a90824f10e516a520521aca6543cd4dd5a6971699b08916f5d91bb6"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.2/bibleit_0.0.2_darwin_amd64.tar.gz"
-      sha256 "bb7f30afb207c4eb67b95235507b16589d5aeb9eb245808733fcdde87b657a71"
+      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.3/bibleit_0.0.3_darwin_amd64.tar.gz"
+      sha256 "599c3fd0d4a75db12f411d6f7c26e69f2b4b875b5aeede153e231db6b10be171"
     end
   end
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.2/bibleit_0.0.2_linux_arm64.tar.gz"
-      sha256 "dc699c2d95515aa6f754ebe645b7d28dff0a3978186ac9f04bbbcdfd58640d74"
+      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.3/bibleit_0.0.3_linux_arm64.tar.gz"
+      sha256 "201cab58874af4195c5abaf0f4c16bbf6f26bfd7f0e48bd0a7a199a206ea62db"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.2/bibleit_0.0.2_linux_amd64.tar.gz"
-      sha256 "8545f5f41c5b3964b6e66376d2573e2c33a2abf5ef881f84ca1d754f6a39282e"
+      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.3/bibleit_0.0.3_linux_amd64.tar.gz"
+      sha256 "26e1b3730ddabeb308e6996a6aa92734b4f41eb531dbf963309dcbab54541caa"
     end
   end
   def install
