@@ -14,7 +14,11 @@ import tempfile
 import tarfile
 
 
+from check_homebrew_architecture import native_host, verify_binary
+
+
 def main():
+    host = native_host()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--assets', required=True)
     parser.add_argument('--formula', help='Formula from the separate tap; defaults to the generated candidate formula')
@@ -85,6 +89,7 @@ def main():
         run('install', '--formula', '--build-from-source', name)
         run('test', name)
         binary = prefix / 'bin/bibleit'
+        binary_architecture = verify_binary(binary, host)
         expected = f'bibleit CLI version {version}'
         assert subprocess.check_output([str(binary), 'version'], text=True).strip() == expected
         before = hashlib.sha256(binary.read_bytes()).hexdigest()
@@ -99,6 +104,7 @@ def main():
                     assert expected and (prefix / 'share' / formula_name / notice).read_bytes() == expected, notice
         verify_notices()
         run('reinstall', '--formula', '--build-from-source', name)
+        assert verify_binary(binary, host) == binary_architecture
         assert hashlib.sha256(binary.read_bytes()).hexdigest() == before
         verify_notices()
         run('test', name)
@@ -110,7 +116,7 @@ def main():
         assert not (prefix / 'Cellar' / formula_name).exists()
     report = Path(args.report)
     report.parent.mkdir(parents=True, exist_ok=True)
-    report.write_text(json.dumps({'platform': os.uname().sysname, 'architecture': os.uname().machine, 'version': version, 'local_cli_archives': True, 'isolated_prefix': True, 'redistribution_notices_verified': True, 'checks': evidence}, indent=2) + '\n')
+    report.write_text(json.dumps({'native_host': host, 'binary': binary_architecture, 'binary_sha256': before, 'platform': os.uname().sysname, 'architecture': os.uname().machine, 'version': version, 'local_cli_archives': True, 'isolated_prefix': True, 'redistribution_notices_verified': True, 'checks': evidence}, indent=2) + '\n')
     print(f'PASS: Homebrew install/test/reinstall/completions/uninstall; report {report}')
 
 
