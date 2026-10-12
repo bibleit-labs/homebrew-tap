@@ -5,6 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import tarfile
 
 VERSION = re.compile(r'v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*)?\Z')
 
@@ -32,12 +33,25 @@ def verified_formula(version, assets):
     if not text.startswith('class BibleitCli < Formula\n') or re.findall(r'^\s*version "([^"]+)"$', text, re.M) != [version[1:]]:
         raise ValueError('unexpected formula class or version')
     expected = {}
+    notices = None
+    if '    pkgshare.install "LICENSE", "THIRD_PARTY_NOTICES"' not in text:
+        raise ValueError("formula must install redistribution notices")
     for system in ('darwin', 'linux'):
         for arch in ('arm64', 'amd64'):
             name = f'bibleit_{version[1:]}_{system}_{arch}.tar.gz'
             sha = hashlib.sha256((assets / name).read_bytes()).hexdigest()
             if checksums.get(name) != sha or manifest.get('artifacts', {}).get(name) != sha:
                 raise ValueError(f'archive checksum mismatch: {name}')
+            with tarfile.open(assets / name) as archive:
+                current = {}
+                for notice in ('LICENSE', 'THIRD_PARTY_NOTICES'):
+                    entries = [entry for entry in archive.getmembers() if entry.name == notice]
+                    if len(entries) != 1 or not entries[0].isfile() or entries[0].size == 0:
+                        raise ValueError(f'archive requires a unique nonempty {notice}: {name}')
+                    current[notice] = archive.extractfile(entries[0]).read()
+                if notices is not None and current != notices:
+                    raise ValueError('redistribution notices differ across archives')
+                notices = current
             expected[f'https://github.com/bibleit-labs/bibleit-cli/releases/download/{version}/{name}'] = sha
     if len(urls) != 4 or len(hashes) != 4 or len(set(urls)) != 4 or dict(zip(urls, hashes)) != expected:
         raise ValueError('formula URLs/checksums do not match the released archives')
