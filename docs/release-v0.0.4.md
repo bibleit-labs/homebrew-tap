@@ -1,7 +1,9 @@
-# v0.0.4 staged formula
+# v0.0.4 published formula
 
-This formula is staged on an unmerged review branch. The live tap remains on
-v0.0.3. Publishing v0.0.4 and merging this formula require owner approval.
+Published 2026-10-12 after owner approval. CLI v0.0.4 is latest stable and
+[PR #15](https://github.com/bibleit-labs/homebrew-tap/pull/15) merged the formula
+as `370620ac2728cdd4c9d2eabdae3f0058d2d723e9`. All twelve public release assets
+match the approved candidate hashes; previous release assets remain unchanged.
 
 The candidate source is `df1904650266cac7d15fad254589f0e729f9ef22` in bibleit-cli,
 using Go 1.27.1 and the pinned public Go SDK v0.0.1. The updater verified a clean
@@ -22,6 +24,13 @@ The release fixes browser login waiting after authorization is denied and adds
 source-build instructions. Shell completion still requires the setup documented
 in the CLI README; neither installers nor this formula edit shell startup files.
 
-After approval, publish the exact reviewed CLI assets, verify their anonymous
-availability and hashes, then merge this formula and run anonymous Homebrew
-installation checks. Keep existing releases immutable.
+[Anonymous Homebrew run 38281509948](https://github.com/bibleit-labs/homebrew-tap/actions/runs/38281509948)
+passed all four native platforms at standard prefixes with empty download caches:
+install/test/reinstall/uninstall, exact installed binary hashes, architecture, notices,
+completions and legacy configuration preservation. All four downloaded reports were
+checked against the approved executable hashes.
+
+[Anonymous CLI run 38281676238](https://github.com/bibleit-labs/bibleit-cli/actions/runs/38281676238)
+passed all six native targets after correcting a missing executable-hash lookup field
+in the CLI evidence record. Release assets and validation helpers were unchanged.
+All approved publication gates are complete.
