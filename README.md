@@ -40,8 +40,7 @@ in the CLI guide.
 ## Support and contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and the [maintainer guide](docs/maintenance.md)
-for formula updates and validation. [Public launch evidence](docs/public-launch.md)
-records installation checks. Intel macOS follows
+for formula updates and validation. Intel macOS follows
 [Homebrew Tier 3](https://docs.brew.sh/Support-Tiers) support.
 Report vulnerabilities privately through [SECURITY.md](SECURITY.md).
 
