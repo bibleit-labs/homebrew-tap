@@ -4,26 +4,27 @@ class BibleitCli < Formula
   license "MIT"
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.1/bibleit_0.0.1_darwin_arm64.tar.gz"
-      sha256 "8a25b1957ef1b358d7027ee3782122e53b7ebe1d685c756e7a609de7f865c942"
+      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.2/bibleit_0.0.2_darwin_arm64.tar.gz"
+      sha256 "59658e724ad2e0df4600dbfb7253faeb265772d25af620702bb0b8762864b33d"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.1/bibleit_0.0.1_darwin_amd64.tar.gz"
-      sha256 "319a9c4d24b2911fc4963600d18b86d080019af3d76c99b7fabad3b7752add7e"
+      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.2/bibleit_0.0.2_darwin_amd64.tar.gz"
+      sha256 "bb7f30afb207c4eb67b95235507b16589d5aeb9eb245808733fcdde87b657a71"
     end
   end
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.1/bibleit_0.0.1_linux_arm64.tar.gz"
-      sha256 "9a90adcc344bdd52e4868cbc78886b07cde0a0c05a161fb6ffeb2e5d5fce579a"
+      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.2/bibleit_0.0.2_linux_arm64.tar.gz"
+      sha256 "dc699c2d95515aa6f754ebe645b7d28dff0a3978186ac9f04bbbcdfd58640d74"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.1/bibleit_0.0.1_linux_amd64.tar.gz"
-      sha256 "4c9ecc4dcca075d202ad502c49e916440fd1a92f9c5cb2e55a32f92a9944b601"
+      url "https://github.com/bibleit-labs/bibleit-cli/releases/download/v0.0.2/bibleit_0.0.2_linux_amd64.tar.gz"
+      sha256 "8545f5f41c5b3964b6e66376d2573e2c33a2abf5ef881f84ca1d754f6a39282e"
     end
   end
   def install
     bin.install "bibleit"
+    pkgshare.install "LICENSE", "THIRD_PARTY_NOTICES"
     bash_completion.install "completions/bibleit.bash" => "bibleit"
     zsh_completion.install "completions/_bibleit"
     fish_completion.install "completions/bibleit.fish"

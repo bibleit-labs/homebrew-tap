@@ -1,5 +1,7 @@
 import hashlib
 import json
+import io
+import tarfile
 from pathlib import Path
 import tempfile
 import unittest
@@ -16,15 +18,51 @@ class FormulaUpdateTests(unittest.TestCase):
         for system in ('darwin', 'linux'):
             for arch in ('arm64', 'amd64'):
                 name = f'bibleit_0.1.0_{system}_{arch}.tar.gz'
-                data = name.encode()
-                (self.assets / name).write_bytes(data)
+                self.write_archive(self.assets / name)
+                data = (self.assets / name).read_bytes()
                 hashes[name] = hashlib.sha256(data).hexdigest()
                 lines += [f'  url "https://github.com/bibleit-labs/bibleit-cli/releases/download/{self.version}/{name}"', f'  sha256 "{hashes[name]}"']
-        self.formula = '\n'.join(lines + ['end', ''])
+        self.formula = '\n'.join(lines + ['  def install', '    pkgshare.install "LICENSE", "THIRD_PARTY_NOTICES"', '  end', 'end', ''])
         (self.assets / 'bibleit-cli.rb').write_text(self.formula)
         self.manifest = dict(version=self.version, local_only=False, dirty=False, artifacts=hashes, client=dict(workspace=False, Version="v0.0.0-20261011144051-464d86d7dd41", Sum="h1:fixture"))
         self.write_manifest()
         (self.assets / 'checksums.txt').write_text(''.join(f'{sha}  {name}\n' for name, sha in hashes.items()))
+
+    def write_archive(self, path, omit=None, notices=b'fixture notice'):
+        with tarfile.open(path, 'w:gz') as archive:
+            for name, data in [('LICENSE', b'fixture MIT license'), ('THIRD_PARTY_NOTICES', notices)]:
+                if name == omit:
+                    continue
+                info = tarfile.TarInfo(name)
+                info.size = len(data)
+                archive.addfile(info, io.BytesIO(data))
+
+    def refresh_hashes(self):
+        hashes = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in self.assets.glob('*.tar.gz')}
+        text = (self.assets / 'bibleit-cli.rb').read_text()
+        for name, old in self.manifest['artifacts'].items():
+            text = text.replace(old, hashes[name])
+        (self.assets / 'bibleit-cli.rb').write_text(text)
+        self.manifest['artifacts'] = hashes
+        self.write_manifest()
+        (self.assets / 'checksums.txt').write_text(''.join(f'{sha}  {name}\n' for name, sha in hashes.items()))
+
+    def test_correct_checksum_cannot_hide_missing_notices(self):
+        self.write_archive(next(self.assets.glob('*.tar.gz')), omit='THIRD_PARTY_NOTICES')
+        self.refresh_hashes()
+        with self.assertRaisesRegex(ValueError, 'THIRD_PARTY_NOTICES'):
+            verified_formula(self.version, self.assets)
+
+    def test_notices_must_match_across_archives(self):
+        self.write_archive(next(self.assets.glob('*.tar.gz')), notices=b'different notice')
+        self.refresh_hashes()
+        with self.assertRaisesRegex(ValueError, 'notices differ'):
+            verified_formula(self.version, self.assets)
+
+    def test_formula_must_install_notices(self):
+        (self.assets / 'bibleit-cli.rb').write_text(self.formula.replace('    pkgshare.install "LICENSE", "THIRD_PARTY_NOTICES"', ''))
+        with self.assertRaisesRegex(ValueError, 'install redistribution notices'):
+            verified_formula(self.version, self.assets)
 
     def write_manifest(self):
         (self.assets / 'manifest.json').write_text(json.dumps(self.manifest))
@@ -40,8 +78,9 @@ class FormulaUpdateTests(unittest.TestCase):
 
     def test_prerelease_version_is_preserved(self):
         for p in list(self.assets.iterdir()):
-            text = p.read_text().replace('0.1.0', '0.1.0-rc.1')
-            p.write_text(text)
+            if not p.name.endswith('.tar.gz'):
+                text = p.read_text().replace('0.1.0', '0.1.0-rc.1')
+                p.write_text(text)
             if '0.1.0' in p.name:
                 p.rename(p.with_name(p.name.replace('0.1.0', '0.1.0-rc.1')))
         manifest = json.loads((self.assets / 'manifest.json').read_text())

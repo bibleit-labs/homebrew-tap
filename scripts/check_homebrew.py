@@ -11,6 +11,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+import tarfile
 
 
 def main():
@@ -89,8 +90,17 @@ def main():
         before = hashlib.sha256(binary.read_bytes()).hexdigest()
         for path in ('etc/bash_completion.d/bibleit', 'share/zsh/site-functions/_bibleit', 'share/fish/vendor_completions.d/bibleit.fish'):
             assert (prefix / path).is_file(), path
+        def verify_notices():
+            system = 'darwin' if os.uname().sysname == 'Darwin' else 'linux'
+            archive_path = next(assets.glob(f'bibleit_{version}_{system}_*.tar.gz'))
+            with tarfile.open(archive_path) as archive:
+                for notice in ('LICENSE', 'THIRD_PARTY_NOTICES'):
+                    expected = archive.extractfile(notice).read()
+                    assert expected and (prefix / 'share' / formula_name / notice).read_bytes() == expected, notice
+        verify_notices()
         run('reinstall', '--formula', '--build-from-source', name)
         assert hashlib.sha256(binary.read_bytes()).hexdigest() == before
+        verify_notices()
         run('test', name)
         # The disposable prefix has no dependent packages. Avoid Homebrew's
         # dependent checks/autoremove where supported by the installed Homebrew.
@@ -100,7 +110,7 @@ def main():
         assert not (prefix / 'Cellar' / formula_name).exists()
     report = Path(args.report)
     report.parent.mkdir(parents=True, exist_ok=True)
-    report.write_text(json.dumps({'platform': os.uname().sysname, 'architecture': os.uname().machine, 'version': version, 'local_cli_archives': True, 'isolated_prefix': True, 'checks': evidence}, indent=2) + '\n')
+    report.write_text(json.dumps({'platform': os.uname().sysname, 'architecture': os.uname().machine, 'version': version, 'local_cli_archives': True, 'isolated_prefix': True, 'redistribution_notices_verified': True, 'checks': evidence}, indent=2) + '\n')
     print(f'PASS: Homebrew install/test/reinstall/completions/uninstall; report {report}')
 
 

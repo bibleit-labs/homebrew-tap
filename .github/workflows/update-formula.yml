@@ -20,16 +20,16 @@ jobs:
     env:
       VERSION: ${{ inputs.version }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - name: Validate version before downloads
         run: python3 scripts/update_formula.py --version "$VERSION" --validate-version
       - name: Verify CLI release read access
         env:
-          GH_TOKEN: ${{ secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
+          GH_TOKEN: ${{ github.event.repository.private && secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
         run: bash scripts/check_cli_access.sh
       - name: Download published CLI formula and archives
         env:
-          GH_TOKEN: ${{ secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
+          GH_TOKEN: ${{ github.event.repository.private && secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
         run: |
           gh release view "$VERSION" --repo bibleit-labs/bibleit-cli --json isDraft --jq 'if .isDraft then error("draft release is not publishable") else . end'
           gh release download "$VERSION" --repo bibleit-labs/bibleit-cli --dir artifacts \
