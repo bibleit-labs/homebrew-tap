@@ -7,7 +7,7 @@ on:
         required: true
         type: string
       candidate_run_id:
-        description: Successful private CLI candidate run ID; empty selects a published release
+        description: Successful public CLI candidate run ID; empty selects a published release
         required: false
         default: ''
         type: string
@@ -28,9 +28,9 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
-      - name: Validate version and private release access
+      - name: Validate version and public release access
         env:
-          GH_TOKEN: ${{ github.event.repository.private && secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           python3 scripts/update_formula.py --version "$VERSION" --validate-version
           bash scripts/check_cli_access.sh
@@ -44,7 +44,7 @@ jobs:
           token: ${{ github.token }}
       - name: Download and verify released formula and archives
         env:
-          GH_TOKEN: ${{ github.event.repository.private && secrets.BIBLEIT_CLI_READ_TOKEN || github.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           if [ -n "$CANDIDATE_RUN" ]; then
             [[ "$CANDIDATE_RUN" =~ ^[0-9]+$ ]] || { echo 'Invalid candidate run ID'; exit 1; }
