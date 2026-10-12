@@ -26,12 +26,12 @@ rejected. Update both the generated formula and relevant docs together.
 
 Pushes/PRs normally run Homebrew syntax/style and updater regressions. Docs-only
 changes need content/link review. The Validate Homebrew package workflow accepts
-a published version or a successful private CLI candidate run ID. Candidate mode
+a published version or a successful public CLI candidate run ID. Candidate mode
 verifies repository/workflow/event/source/version before comparing the formula
 and installing local archives in disposable native macOS/Linux prefixes.
 
-The private CLI read secret needs Contents read for releases and Actions read for
-candidate artifacts. Do not put GitHub credentials in formula URLs. Review the
+Workflows use their GitHub token for public release and candidate reads; no stored
+personal access token is required. Do not put GitHub credentials in formula URLs. Review the
 script/options and [README](README.md) for authenticated fixture commands.
 These checks do not establish anonymous downloads or customer installation.
 
