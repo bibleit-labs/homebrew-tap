@@ -1,6 +1,6 @@
 {
   "version": "v0.0.5",
-  "status": "published_native_checks_pending",
+  "status": "published_native_checks_passed_public_formula_verified",
   "source_commit": "562798043308e3f1f6f2eafc4ebdad52ed6758d3",
   "manifest": {
     "version": "v0.0.5",
@@ -95,5 +95,31 @@
   "publication_requires_approval": false,
   "release_title": "v0.0.5",
   "cli_release": "https://github.com/bibleit-labs/bibleit-cli/releases/tag/v0.0.5",
-  "formula_sha256": "8d09f88b598f77ce2a754e2e6f6322bfc1fdbbf8e24f1fc6631b4b86f0dbc1d9"
+  "formula_sha256": "8d09f88b598f77ce2a754e2e6f6322bfc1fdbbf8e24f1fc6631b4b86f0dbc1d9",
+  "tap_merge_commit": "6efab864e576b3c0bc0793b09991a2547deb4e6a",
+  "native_validation_run": 38328719478,
+  "public_main_formula_matches": true,
+  "native_reports": [
+    {
+      "runner": "ubuntu-24.04",
+      "binary_sha256": "0c1442abde8380fd590634bee57dee349ccb1943f6835c03f96b6e8eb6cede69",
+      "notices_verified": true
+    },
+    {
+      "runner": "macos-15-intel",
+      "binary_sha256": "c56f1424a57f04e877d532449ac1615efc2b78669a9137a032c4b38724b758b6",
+      "notices_verified": true
+    },
+    {
+      "runner": "macos-15",
+      "binary_sha256": "fb92ca696cd693e44b6f11219ef30c22c2a4a0bd0ac41c98a367c4673223597b",
+      "notices_verified": true
+    },
+    {
+      "runner": "ubuntu-24.04-arm",
+      "binary_sha256": "c594fd6e9ba3f84937957ab1126846e4f8a4f236b64c67b2261aee9087ef50a6",
+      "notices_verified": true
+    }
+  ],
+  "public_lifecycle_rerun": false
 }
