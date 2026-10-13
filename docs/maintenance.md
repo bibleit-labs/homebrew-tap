@@ -44,7 +44,7 @@ Linux amd64/ARM64 with empty caches at the standard Homebrew prefixes. The
 harness verifies host and installed binary architectures and rejects Rosetta.
 Intel macOS remains [Homebrew Tier 3](https://docs.brew.sh/Support-Tiers). See
 [public launch evidence](public-launch.md) and the dated
-[release evidence](release-v0.0.5.md). Packaged README changes require
+[release evidence](release-v0.0.6.md). Packaged README changes require
 fresh candidate archives and matching formula hashes before release approval.
 
 ## Launch and audit evidence
