@@ -14,7 +14,7 @@ jobs:
     env:
       EXPECTED_HOMEBREW_RUNNER: ${{ matrix.os }}
     steps:
-      - uses: Homebrew/actions/setup-homebrew@56e6e1830b3c103b917ea1a7d175dcf99b62e6fc
+      - uses: Homebrew/actions/setup-homebrew@4790763c0a3ba4036f72634dc079c4a7dfcd4878
         with:
           token: ''
           brew-gh-api-token: ''
