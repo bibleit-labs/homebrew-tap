@@ -13,10 +13,10 @@ bibleit version
 bibleit auth login
 ```
 
-The formula installs CLI **v0.1.0**, using bibleit-go v0.1.0 and REST v1 for HTTP
+The formula installs CLI **v0.2.0**, using bibleit-go v0.2.0 and REST v1 for HTTP
 commands. HTTP JSON uses schema version 2; SSH output retains version 1. See the
-[REST migration guide](https://github.com/bibleit-labs/bibleit-cli/blob/v0.1.0/docs/rest-api.md)
-and [verified release inputs](docs/release-v0.1.0.md).
+[REST migration guide](https://github.com/bibleit-labs/bibleit-cli/blob/v0.2.0/docs/rest-api.md)
+and [verified release inputs](docs/release-v0.2.0.md).
 
 The repository name homebrew-tap gives the identifier bibleit-labs/tap. The formula
 selects macOS/Linux amd64/arm64 archives and installs Bash/Zsh/Fish completions,
