@@ -15,6 +15,6 @@ Release in this order:
    contains the manifest, checksums.txt, archives and generated formula. Run the tap tests and Homebrew
    validation before committing the resulting formula.
 
-The v0.2.3 formula uses the generated formula and archive checksums from CLI
-release workflow [39406201708](https://github.com/bibleit-labs/bibleit-cli/actions/runs/39406201708).
-See [release inputs](release-v0.2.3.md) for exact source and SDK provenance.
+The v0.2.4 formula uses the generated formula and archive checksums from CLI
+release workflow [40347134923](https://github.com/bibleit-labs/bibleit-cli/actions/runs/40347134923).
+See [release inputs](release-v0.2.4.md) for exact source and SDK provenance.
