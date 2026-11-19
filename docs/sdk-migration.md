@@ -15,6 +15,8 @@ Release in this order:
    contains the manifest, checksums.txt, archives and generated formula. Run the tap tests and Homebrew
    validation before committing the resulting formula.
 
-The v0.2.4 formula uses the generated formula and archive checksums from CLI
-release workflow [40347134923](https://github.com/bibleit-labs/bibleit-cli/actions/runs/40347134923).
-See [release inputs](release-v0.2.4.md) for exact source and SDK provenance.
+The v0.3.0 formula uses the immutable CLI release and bibleit-go v0.5.0,
+including shared Broadcast Studio REST/SSH controls. The SDK handles exact-byte
+Setup mutation payloads and typed transport results; the CLI retains credentials
+and terminal/OpenSSH integration. Server permissions remain authoritative.
+See [release inputs](release-v0.3.0.md) for exact source and SDK provenance.
