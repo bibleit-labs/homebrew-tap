@@ -16,6 +16,17 @@ request files for safe reconciliation. Broadcast mutations do not automatically
 retry after an uncertain response. Install methods, executable and completion
 paths remain unchanged.
 
-Release qualification evidence will be recorded after the immutable public
-assets and this formula pass the native packaging and anonymous installation
-checks. Historical validations do not qualify v0.3.0.
+Release qualification:
+
+- [Tap syntax/style and updater regressions](https://github.com/bibleit-labs/homebrew-tap/actions/runs/44562892670) passed.
+- [Four native published-package lifecycle checks](https://github.com/bibleit-labs/homebrew-tap/actions/runs/44563725051) passed on macOS ARM64/Intel and Linux amd64/ARM64. GitHub could not acquire the first macOS ARM runner; the ordinary failed-job retry passed without changing inputs or checks.
+- [Anonymous public installation](https://github.com/bibleit-labs/homebrew-tap/actions/runs/44568123918) passed on all four native platforms after the formula merged to main. Its first macOS ARM attempt also failed to acquire a hosted runner; the ordinary failed-job retry passed.
+
+The public check used empty caches, ordinary unauthenticated download URLs and
+standard Homebrew prefixes. Each platform verified native binary architecture,
+version/help, retained licenses/notices and completions, install/test/reinstall,
+and uninstall. It did not use customer credentials or create broadcasts.
+
+Public archives, formula, manifest and checksums were byte-compared with the
+reviewed immutable tag assets before formula merge. The CLI tag remains bound
+to the source above; later documentation commits do not change released inputs.
